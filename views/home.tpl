@@ -13,9 +13,12 @@
 	  <input type="submit" value="Logout">
 	</form>
       </div>
-
       
-
+      <div class="stations">
+	% for station in output:
+	  <li>{{station[5:-1]}}</li>
+	% end
+      </div>
     </div>
   </body>
 </html>

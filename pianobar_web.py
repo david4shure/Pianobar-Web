@@ -1,5 +1,10 @@
+# David SHure
+# Pandora Bar (web interface for pianobar)
+
 from bottle import *
 import subprocess
+import os
+import signal
 
 proc = None
 
@@ -31,10 +36,9 @@ def serve_static(filename):
 def authenticate():
     global proc 
     proc = subprocess.Popen("pianobar", stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    stdout = proc.stdout
     proc.stdin.write(request.forms.get("username") + "\n")
     proc.stdin.write(request.forms.get("password") + "\n")
-    auth = [stdout.readline() for i in range(0, 4)][-1]
+    auth = [proc.stdout.readline() for i in range(0, 4)][-1]
     if auth == "\x1b[2K(i) Login... Ok.\n":
         response.set_cookie("username", request.forms.get("username"))
         response.set_cookie("password", request.forms.get("password"))
@@ -54,17 +58,28 @@ def verify():
         output = ps_aux.stdout.readlines()
         global proc
         for line in output:
-            process = line.split()
-            if process[10] == "pianobar" and not process[1] == str(proc.pid):
-                return template("verify", output=process)
+            ps_aux_output = line.split()
+            if ps_aux_output[10] == "pianobar" and not ps_aux_output[1] == str(proc.pid):
+                ps_aux.terminate()
+                ps_aux.wait()
+                return template("verify", output=ps_aux_output)
+        print "Redirecting..."
         redirect("/home")
     else:
         redirect("/login")
 
-
+# home route
 @get('/home')
 def home():
-    return template("home")
+    global proc
+    proc.stdout.readline()
+    stations = read_all(proc.stdout)
+    return template("home", output=stations)
+
+@post('/home')
+def change_station():
+    global proc
+
 
 # kills any existing pianobar process that was already running
 @post('/kill')
@@ -82,5 +97,22 @@ def logout():
     response.set_cookie("username", "")
     response.set_cookie("password", "")
     redirect("/login")
+
+def signal_handler(signum, frame):
+    raise Exception("! readline() took too long !")
+
+# reads all the lines possible in a file without EOF (e.g. a stream)
+def read_all(file_object):
+    lines = []
+    signal.signal(signal.SIGALRM, signal_handler)
+    try:
+        while True:
+            signal.alarm(1)
+            line = file_object.readline()
+            lines.append(line)
+            signal.alarm(0)
+    except Exception, e:
+        return lines
+            
 
 run(host="localhost", port=8080, debug=True)
