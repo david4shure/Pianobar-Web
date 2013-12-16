@@ -3,8 +3,8 @@
     <link href="/static/style.css" rel="stylesheet" type="text/css">
   </head>
   <body>
-    <div class="login_content">
-      <div class="login_banner">
+    <div class="content">
+      <div class="banner">
 	<h2>Pandora Bar</h2>
       </div>
       
@@ -18,9 +18,11 @@
 	  <input type="submit" value="Login">
 	</form>
       </div>
+
       % if error == "auth":
         <span style="color:red;">Invalid Login</span>
       % end
+	
     </div>
   </body>
 </html>

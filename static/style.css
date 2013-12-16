@@ -1,8 +1,16 @@
-.login_content {
+.content {
     text-align: center;
 }
-.login_banner {
+
+.banner {
     border: 1px solid black;
     border-radius: 10px;
-    background: #EFFFFE;
+    background: #E3E8FA;
+}
+
+.home_logout {
+    position: relative;
+    top: -45px;
+    right: 20px;
+    float: right;
 }
