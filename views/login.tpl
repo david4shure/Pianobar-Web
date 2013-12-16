@@ -18,7 +18,7 @@
 	  <input type="submit" value="Login">
 	</form>
       </div>
-      % if error == "Invalid Login":
+      % if error == "auth":
         <span style="color:red;">Invalid Login</span>
       % end
     </div>

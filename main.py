@@ -1,8 +1,7 @@
 from bottle import *
 import subprocess
 
-process = None
-error = None
+proc = None
 
 @get('/')
 def index():
@@ -10,7 +9,14 @@ def index():
 
 @get('/login')
 def login():
-    return template("login", error=None)
+    if (request.get_cookie("username") and request.get_cookie("password")):
+        redirect("/home")
+    else:
+        return template("login", error=None)
+
+@get('/login/<error>')
+def login_error(error):
+    return template("login", error=error)
 
 @get('/static/<filename>')
 def serve_static(filename):
@@ -28,10 +34,15 @@ def authenticate():
         response.set_cookie("password", request.forms.get("password"))
         redirect("/home")
     else:
-        return template("login", error="Invalid Login")
+        proc.terminate()
+        proc.wait()
+        redirect("/login/auth")
 
 @get('/home')
 def home():
-    return "Hello, " + request.get_cookie("username")
+    if request.get_cookie("username") and request.get_cookie("password"):
+        return "Hello, " + request.get_cookie("username")
+    else:
+        redirect("/login")
 
 run(host="localhost", port=8080, debug=True)
