@@ -8,16 +8,14 @@
 	<h2>Pandora Bar</h2>
       </div>
       
-      <div class="home_logout">
+      <div class="logout">
 	<form action="/logout" method="POST">
 	  <input type="submit" value="Logout">
 	</form>
       </div>
 
-      % for line in ps_aux:
-        <p>{{line}}</p>
-      % end
+      
 
-      </div>
+    </div>
   </body>
 </html>

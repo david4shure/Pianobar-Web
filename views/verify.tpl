@@ -8,7 +8,7 @@
 	<h2>Pandora Bar</h2>
       </div>
       
-      <div class="home_logout">
+      <div class="logout">
 	<form action="/logout" method="POST">
 	  <input type="submit" value="Logout">
 	</form>
