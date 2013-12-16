@@ -1,0 +1,8 @@
+.login_content {
+    text-align: center;
+}
+.login_banner {
+    border: 1px solid black;
+    border-radius: 10px;
+    background: #EFFFFE;
+}
