@@ -8,21 +8,26 @@
 	<h2>Pandora Bar</h2>
       </div>
       
-      <div class="login_form">
-	<form action="/auth" method="POST">
-	  <br>
-	  Email <input type="text" name="email" />
-	  <br>
-	  Password <input type="password" name="password" />
-	  <br>
-	  <input type="submit" value="Login">
-	</form>
-      </div>
+      <div class="content">
+	<div class="login_form">
+	  <form action="/auth" method="POST">
+	    
+	    <div class="email_input">
+	      <input type="text" name="email" placeholder="Email"/>
+	    </div>
+	    <div class="password_input">
+	      <input type="password" name="password" placeholder="Password"/>
+	    </div>
+	    <div class="login_button">
+	      <input type="submit" value="Login">
+	    </div>
+	  </form>
+	</div>
 
-      % if error == "auth":
-        <span style="color:red;">Invalid email / password combo</span>
-      % end
-	
+	% if error == "auth":
+        <div class="auth_error">Invalid login</div>
+	% end
+      </div>
     </div>
   </body>
 </html>

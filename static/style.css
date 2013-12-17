@@ -1,7 +1,7 @@
 .banner {
-    border: 1px solid #5D8AA8;
-    border-radius: 10px;#5D8AA8;
-    background: linear-gradient(#E3E8FA, #FFFFFF);
+    border: 3px solid #C1CDCD;
+    border-radius: 10px;
+    background: linear-gradient(to left, #EBDDE2, #DDDDDD);
     position: relative;
     left: 30px;
     width: 400px;
@@ -14,21 +14,70 @@
     color: #8C489F;
 }
 
-.logout {
+.logout_button {
     position: relative;
-    top: -48px;
-    left: 50px;
+    top: -64px;
+    left: 30px;
 }
+
 .station {
-    border: 1px solid #5D8AA8;
+    border: 2px solid #DDEAD9;
     border-radius: 5px;
-    width: 200px;
-    margin-top: 10px;
-    background: linear-gradient(#E3E8FA, #FFFFFF);
+    width: 400px;
+    margin-top: 5px;
+    background: linear-gradient(to left, #C0D9B9, #FFFFFF);
+}
+
+.station:hover {
+    border: 2px solid #C0D9C9;
 }
 
 .station_name {
     color: #8C489F;
     position: relative;
     left: 20px;
+}
+
+.change_station {
+    position: relative;
+    right: -330px;
+    top: -15px;
+}
+
+.current_user {
+    position: relative;
+    text-align: center;
+    font-size: 80%;
+    font-weight: bold;
+    top: -15px;
+}
+
+.station_id {
+    position: relative;
+    top: -20px;
+}
+
+.email_input {
+    position: relative;
+    left: 10em;
+    top: 1em;
+}
+
+.password_input {
+    position: relative;
+    left: 10em;
+    top: 1.1em;
+}
+
+.login_button {
+    position: relative;
+    top: 1.1em;
+    left: 13em;
+}
+
+.auth_error {
+    color: red;
+    position: relative;
+    top: .5em;
+    left: 12em;
 }
