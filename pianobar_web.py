@@ -1,4 +1,4 @@
-# David SHure
+# David Shure
 # Pandora Bar (web interface for pianobar)
 
 from bottle import *
@@ -9,6 +9,9 @@ import time
 
 proc = None
 stations = {}
+
+email = ""
+password = ""
 
 # redirects to login
 @get('/')
@@ -40,12 +43,12 @@ def authenticate():
     proc = None
     proc = subprocess.Popen("pianobar", stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-    email = request.forms.get("username") + "\n"
-    password = request.forms.get("password") + "\n"
-
+    local_email = request.forms.get("email")
+    local_password = request.forms.get("password")
+    
     # Enter email and password when prompted
-    proc.stdin.write(email)
-    proc.stdin.write(password)
+    proc.stdin.write(local_email + "\n")
+    proc.stdin.write(local_password + "\n")
 
     auth = [proc.stdout.readline() for i in range(0, 4)][-1]
 
@@ -53,8 +56,11 @@ def authenticate():
 
     # This is what the login success line looks like
     if auth == "\x1b[2K(i) Login... Ok.\n":
-        response.set_cookie("username", request.forms.get("username"))
-        response.set_cookie("password", request.forms.get("password"))
+        global email, password
+
+        email = local_email
+        password = local_password
+
         redirect("/verify")
     else:
         # kill the process, it is useless to us
@@ -67,7 +73,8 @@ def authenticate():
 # user to kill any existing pianobar processes
 @get('/verify')
 def verify():
-    if len(request.get_cookie("username")) > 3 and len(request.get_cookie("password")) > 3:
+    global email, password
+    if email and password:
         ps_aux = subprocess.Popen("ps aux | grep pianobar", stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         output = ps_aux.stdout.readlines()
         global proc
@@ -88,12 +95,12 @@ def home():
     global stations
     raw_stations = read_all(proc.stdout)
     try:
-        if (len(stations[request.get_cookie("username")]) == 0):
-            stations[request.get_cookie("username")] = parse_stations(raw_stations)
+        if len(stations[email]) == 0:
+            stations[email] = parse_stations(raw_stations)
     except Exception, e:
-        stations[request.get_cookie("username")] = parse_stations(raw_stations)
+        stations[email] = parse_stations(raw_stations)
     proc.stdin.write("1\n")
-    return template("home", user_stations=stations[request.get_cookie("username")])
+    return template("home", user_stations=stations[email], current_user=email)
 
 @post('/home')
 def change_station():
@@ -118,9 +125,10 @@ def logout():
     proc.terminate()
     proc.wait()
     proc = None
-    stations[request.get_cookie("username")] = []
-    response.set_cookie("username", "")
-    response.set_cookie("password", "")
+    global email, password
+    stations[email] = []
+    email = ""
+    password = ""
     redirect("/login")
 
 def signal_handler(signum, frame):

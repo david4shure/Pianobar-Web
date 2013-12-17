@@ -11,7 +11,7 @@
       <div class="login_form">
 	<form action="/auth" method="POST">
 	  <br>
-	  Username <input type="text" name="username" />
+	  Email <input type="text" name="email" />
 	  <br>
 	  Password <input type="password" name="password" />
 	  <br>
@@ -20,7 +20,7 @@
       </div>
 
       % if error == "auth":
-        <span style="color:red;">Invalid Login</span>
+        <span style="color:red;">Invalid email / password combo</span>
       % end
 	
     </div>

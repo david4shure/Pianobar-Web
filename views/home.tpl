@@ -5,6 +5,7 @@
   <body>
     <div class="banner">
       <h2>Pandora Bar</h2>
+      <div class="current_user">{{current_user}}</div>
       <div class="logout">
 	<form action="/logout" method="POST">
 	  <input type="submit" value="Logout">
