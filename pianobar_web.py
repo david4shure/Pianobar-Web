@@ -5,9 +5,10 @@ from bottle import *
 import subprocess
 import os
 import signal
+import time
 
 proc = None
-stations = []
+stations = {}
 
 # redirects to login
 @get('/')
@@ -17,8 +18,8 @@ def index():
 # checks if we are already logged in
 @get('/login')
 def login():
-    if (request.get_cookie("username") and request.get_cookie("password")):
-        redirect("/verify")
+    if proc is not None:
+        redirect("/home")
     else:
         return template("login", error=None)
 
@@ -36,16 +37,27 @@ def serve_static(filename):
 @post('/auth')
 def authenticate():
     global proc 
+    proc = None
     proc = subprocess.Popen("pianobar", stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    proc.stdin.write(request.forms.get("username") + "\n")
-    proc.stdin.write(request.forms.get("password") + "\n")
+
+    email = request.forms.get("username") + "\n"
+    password = request.forms.get("password") + "\n"
+
+    # Enter email and password when prompted
+    proc.stdin.write(email)
+    proc.stdin.write(password)
+
     auth = [proc.stdout.readline() for i in range(0, 4)][-1]
-    proc.stdout.readline()
+
+    proc.stdout.readline() # dicard the line '(i) Get stations..'
+
+    # This is what the login success line looks like
     if auth == "\x1b[2K(i) Login... Ok.\n":
         response.set_cookie("username", request.forms.get("username"))
         response.set_cookie("password", request.forms.get("password"))
         redirect("/verify")
     else:
+        # kill the process, it is useless to us
         proc.terminate()
         proc.wait()
         redirect("/login/auth")
@@ -55,7 +67,7 @@ def authenticate():
 # user to kill any existing pianobar processes
 @get('/verify')
 def verify():
-    if request.get_cookie("username") and request.get_cookie("password"):
+    if len(request.get_cookie("username")) > 3 and len(request.get_cookie("password")) > 3:
         ps_aux = subprocess.Popen("ps aux | grep pianobar", stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         output = ps_aux.stdout.readlines()
         global proc
@@ -65,7 +77,6 @@ def verify():
                 ps_aux.terminate()
                 ps_aux.wait()
                 return template("verify", output=ps_aux_output)
-        proc.stdin.write("1\n")
         redirect("/home")
     else:
         redirect("/login")
@@ -75,15 +86,22 @@ def verify():
 def home():
     global proc
     global stations
-    if len(stations) == 0:
-        raw_stations = read_all(proc.stdout)
-        stations = parse_stations(raw_stations)
-    return template("home", user_stations=stations)
-
+    raw_stations = read_all(proc.stdout)
+    try:
+        if (len(stations[request.get_cookie("username")]) == 0):
+            stations[request.get_cookie("username")] = parse_stations(raw_stations)
+    except Exception, e:
+        stations[request.get_cookie("username")] = parse_stations(raw_stations)
+    proc.stdin.write("1\n")
+    return template("home", user_stations=stations[request.get_cookie("username")])
 
 @post('/home')
 def change_station():
     global proc
+    new_station = request.forms.get("PID")
+    proc.stdin.write("s")
+    proc.stdin.write(new_station + "\n")
+    redirect("/home")
 
 
 # kills any existing pianobar process that was already running
@@ -99,6 +117,8 @@ def logout():
     global proc
     proc.terminate()
     proc.wait()
+    proc = None
+    stations[request.get_cookie("username")] = []
     response.set_cookie("username", "")
     response.set_cookie("password", "")
     redirect("/login")
@@ -135,14 +155,13 @@ class Station:
     # not very clever use of not regexes
     def parse(self, station_string):
         cleaned = station_string[4:-1]
-        print repr(cleaned)
         self.identifier = int(cleaned[cleaned.index("\t"):cleaned.index(")")].strip())
         split_station = cleaned.split()
-        if (split_station[1] == "q"):
+        if (split_station[1] == "q" and split_station[2]):
             self.name = split_station[2:-1]
         else:
             self.name = split_station[1:-1]
         self.name = " ".join(self.name)
 
 
-run(host="127.0.0.1", port=8080, debug=True)
+run(host="192.168.1.119", port=8080, debug=True)
