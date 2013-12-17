@@ -15,8 +15,11 @@
       </div>
       
       <div class="stations">
-	% for station in output:
-	  <li>{{station[5:-1]}}</li>
+	% for station in user_stations:
+	<div class="station">
+	  <div class="station_name">Name: {{station.name}}</div>
+	  <div class="station_id">ID: {{station.identifier}}</div>
+	</div>
 	% end
       </div>
     </div>

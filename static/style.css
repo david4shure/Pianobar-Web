@@ -14,3 +14,7 @@
     right: 20px;
     float: right;
 }
+.station {
+    border: 1px solid black;
+    border-radius: 5px;
+}

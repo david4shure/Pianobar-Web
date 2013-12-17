@@ -7,6 +7,7 @@ import os
 import signal
 
 proc = None
+stations = []
 
 # redirects to login
 @get('/')
@@ -39,6 +40,7 @@ def authenticate():
     proc.stdin.write(request.forms.get("username") + "\n")
     proc.stdin.write(request.forms.get("password") + "\n")
     auth = [proc.stdout.readline() for i in range(0, 4)][-1]
+    proc.stdout.readline()
     if auth == "\x1b[2K(i) Login... Ok.\n":
         response.set_cookie("username", request.forms.get("username"))
         response.set_cookie("password", request.forms.get("password"))
@@ -63,7 +65,7 @@ def verify():
                 ps_aux.terminate()
                 ps_aux.wait()
                 return template("verify", output=ps_aux_output)
-        print "Redirecting..."
+        proc.stdin.write("1\n")
         redirect("/home")
     else:
         redirect("/login")
@@ -72,9 +74,12 @@ def verify():
 @get('/home')
 def home():
     global proc
-    proc.stdout.readline()
-    stations = read_all(proc.stdout)
-    return template("home", output=stations)
+    global stations
+    if len(stations) == 0:
+        raw_stations = read_all(proc.stdout)
+        stations = parse_stations(raw_stations)
+    return template("home", user_stations=stations)
+
 
 @post('/home')
 def change_station():
@@ -104,8 +109,8 @@ def signal_handler(signum, frame):
 # reads all the lines possible in a file without EOF (e.g. a stream)
 def read_all(file_object):
     lines = []
-    signal.signal(signal.SIGALRM, signal_handler)
     try:
+        signal.signal(signal.SIGALRM, signal_handler)
         while True:
             signal.alarm(1)
             line = file_object.readline()
@@ -113,6 +118,31 @@ def read_all(file_object):
             signal.alarm(0)
     except Exception, e:
         return lines
-            
 
-run(host="localhost", port=8080, debug=True)
+def parse_stations(stations_array):
+    station_list = []
+    for station_string in stations_array:
+        cleaned = station_string[4:-1]
+        # sometimes the wrong lines are sent to this function
+        if "\t" in cleaned:
+            station_list.append(Station(station_string))
+    return station_list
+
+class Station:
+    def __init__(self, station_string):
+        self.parse(station_string)
+
+    # not very clever use of not regexes
+    def parse(self, station_string):
+        cleaned = station_string[4:-1]
+        print repr(cleaned)
+        self.identifier = int(cleaned[cleaned.index("\t"):cleaned.index(")")].strip())
+        split_station = cleaned.split()
+        if (split_station[1] == "q"):
+            self.name = split_station[2:-1]
+        else:
+            self.name = split_station[1:-1]
+        self.name = " ".join(self.name)
+
+
+run(host="127.0.0.1", port=8080, debug=True)
