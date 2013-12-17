@@ -16,15 +16,13 @@
 
 
     <div class="stations">
-      % for i in range(0, 12):
+      % for station in user_stations:
       <div class="station">
-	<div class="station_name"><strong>{{user_stations[i].name}}</strong></div>
-	<div class="change_station">
+	<div class="station_name"><strong>{{station.name}}</strong></div>
+	<div class="change_station_form">
 	  <form action="/home" method="POST">
-	    <input type="hidden" name="PID" value="{{user_stations[i].identifier}}">
-	    <div class="change_station_button">
-	      <input type="submit" value="Change" name="station_id">
-	    </div>
+	    <input type="hidden" name="PID" value="{{station.identifier}}">
+	    <button type="submit" value="Change" class="change_station_button">Change</button>
 	  </form>
 	</div>
       </div>
