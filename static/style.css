@@ -1,11 +1,13 @@
 .banner {
     border: 3px solid #C1CDCD;
-    border-radius: 10px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
     background: linear-gradient(to left, #EBDDE2, #DDDDDD);
     position: relative;
-    left: 30px;
+    left: 0px;
     width: 400px;
     height: 75px;
+    
 }
 
 .banner h2 {
@@ -15,17 +17,43 @@
 }
 
 .logout_button {
-    position: relative;
-    top: -64px;
-    left: 30px;
+   border: 1px solid #bdbfbd;
+   background: #bdbfbd;
+   background: -webkit-gradient(linear, left top, left bottom, from(#b1cca7), to(#a7c9a7));
+   background: -webkit-linear-gradient(top, #b1cca7, #a7c9a7);
+   background: -moz-linear-gradient(top, #b1cca7, #a7c9a7);
+   background: -ms-linear-gradient(top, #b1cca7, #a7c9a7);
+   background: -o-linear-gradient(top, #b1cca7, #a7c9a7);
+   padding: 3.5px 7px;
+   -webkit-border-radius: 4px;
+   -moz-border-radius: 4px;
+   border-radius: 4px;
+   color: #eaffe3;
+   font-size: 11px;
+   font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+   font-weight: bold;
+   text-decoration: none;
+   vertical-align: middle;
+   position: relative;
+   top: -64px;
+   left: 30px;
+   width: 60px;
+   height: 25px;
+}
+
+.logout_button:hover {
+   border-color: #C0D9B9;
+   background: #C0D9B9;
+   color: #ffffff;
 }
 
 .station {
     border: 2px solid #DDEAD9;
     border-radius: 5px;
-    width: 400px;
+    width: 260px;
+    height: 50px;
     margin-top: 5px;
-    background: linear-gradient(to left, #C0D9B9, #FFFFFF);
+    background: linear-gradient(to right, #d9d9d9, #C0D9B9);
 }
 
 .station:hover {
@@ -35,13 +63,13 @@
 .station_name {
     color: #8C489F;
     position: relative;
-    left: 20px;
+    left: 15px;
+    font-family: "Avant Garde", Avantgarde;    
 }
 
 .change_station {
     position: relative;
-    right: -330px;
-    top: -15px;
+    right: -190px;
 }
 
 .current_user {
@@ -59,20 +87,20 @@
 
 .email_input {
     position: relative;
-    left: 10em;
+    left: 8em;
     top: 1em;
 }
 
 .password_input {
     position: relative;
-    left: 10em;
+    left: 8em;
     top: 1.1em;
 }
 
 .login_button {
     position: relative;
-    top: 1.1em;
-    left: 13em;
+    top: 1.4em;
+    left: 10.5em;
 }
 
 .auth_error {
