@@ -19,6 +19,10 @@
 	  <button type="submit" class="banner_button" id="volume_down">-</button>
 	</form>
 
+	<form action="/change" method="POST">
+	  <button type="submit" class="banner_button" id="change">{{"𝌆" if music_playing else "▶"}}
+	</form>
+
     </div>
 
 

@@ -9,6 +9,7 @@ import time
 
 proc = None
 stations = {}
+music_playing = True
 
 email = ""
 password = ""
@@ -91,8 +92,7 @@ def verify():
 # home route
 @get('/home')
 def home():
-    global proc
-    global stations
+    global proc, stations, music_playing
     raw_stations = read_all(proc.stdout)
     try:
         if len(stations[email]) == 0:
@@ -100,7 +100,7 @@ def home():
     except Exception, e:
         stations[email] = parse_stations(raw_stations)
     proc.stdin.write("1\n")
-    return template("home", user_stations=stations[email], current_user=email)
+    return template("home", user_stations=stations[email], current_user=email, music_playing=music_playing)
 
 @post('/home')
 def change_station():
@@ -122,6 +122,21 @@ def increase_volume():
 def decrease_volume():
     global proc
     proc.stdin.write("((")
+    redirect("/home")
+
+# skips current track
+@post('/skip')
+def skip():
+    global proc
+    proc.stdin.write("n")
+    redirect("/home")
+
+
+@post('/change')
+def playpause():
+    global proc, music_playing
+    music_playing = not music_playing
+    proc.stdin.write("p")
     redirect("/home")
 
 # kills any existing pianobar process that was already running
