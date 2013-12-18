@@ -60,11 +60,8 @@ def authenticate():
 
     # This is what the login success line looks like
     if auth == "\x1b[2K(i) Login... Ok.\n":
-
-
         email = local_email
         password = local_password
-
         redirect("/verify")
     else:
         # kill the process, it is useless to us
@@ -78,6 +75,7 @@ def authenticate():
 @get('/verify')
 def verify():
     global email, password, proc
+
     if email and password:
         ps_aux = subprocess.Popen("ps aux | grep pianobar", stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         output = ps_aux.stdout.readlines()

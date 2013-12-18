@@ -4,7 +4,7 @@
   </head>
   <body>
     <div class="content">
-      <div class="banner">
+      <div class="banner" id="login_banner">
 	<h2>Pandora Bar</h2>
       </div>
       
