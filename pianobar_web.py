@@ -10,6 +10,8 @@ import time
 proc = None
 stations = {}
 music_playing = True
+current_station = ""
+first_login = True
 
 email = ""
 password = ""
@@ -85,6 +87,7 @@ def verify():
                 ps_aux.terminate()
                 ps_aux.wait()
                 return template("verify", output=ps_aux_output)
+
         redirect("/home")
     else:
         redirect("/login")
@@ -92,7 +95,7 @@ def verify():
 # home route
 @get('/home')
 def home():
-    global proc, stations, music_playing
+    global proc, stations, music_playing, current_station, first_login
     if proc is None:
         redirect("/login")
     raw_stations = read_all(proc.stdout)
@@ -101,15 +104,23 @@ def home():
             stations[email] = parse_stations(raw_stations)
     except Exception, e:
         stations[email] = parse_stations(raw_stations)
-    proc.stdin.write("1\n")
-    return template("home", user_stations=stations[email], current_user=email, music_playing=music_playing)
+        current_station = stations[email][1].name
+
+    if first_login:
+        current_station = stations[email][1].name
+        proc.stdin.write("1\n")
+
+    first_login = False
+
+    return template("home", user_stations=stations[email], current_user=email, music_playing=music_playing, current_station=current_station)
 
 @post('/home')
 def change_station():
-    global proc
+    global proc, current_station, stations, email
     new_station = request.forms.get("PID")
     proc.stdin.write("s")
     proc.stdin.write(new_station + "\n")
+    current_station = stations[email][int(new_station)].name
     redirect("/home")
 
 # decreases volume by three "notches"
@@ -164,14 +175,14 @@ def kill():
 # logs user out, and terminates the pianobar process spawned by user
 @post('/logout')
 def logout():
-    global proc
+    global proc, first_login, email, password
     proc.terminate()
     proc.wait()
     proc = None
-    global email, password
     stations[email] = []
     email = ""
     password = ""
+    first_login = True
     redirect("/login")
 
 def signal_handler(signum, frame):

@@ -3,7 +3,7 @@
     <link href="/static/style.css" rel="stylesheet" type="text/css">
   </head>
   <body>
-    <div class="banner">
+    <div class="banner" id="main_banner">
       <h2>Pandora Bar</h2>
       <div class="current_user">{{current_user}}</div>
 
@@ -37,19 +37,28 @@
 	
     </div>
 
-
     <div class="stations">
       % for station in user_stations:
-      <div class="station">
-	<div class="station_name"><strong>{{station.name}}</strong></div>
-	<div class="change_station_form">
-	  <form action="/home" method="POST">
-	    <input type="hidden" name="PID" value="{{station.identifier}}">
-	    <button type="submit" value="Change" class="change_station_button">Change</button>
-	  </form>
-	</div>
-      </div>
+      
+        % if station.name == current_station:
+          <div class="station" id="current_station">
+	    <div class="station_name">{{station.name}}</div>
+	  </div>
+
+	% else:
+	  <div class="station">
+	    <div class="station_name">{{station.name}}</div>
+	    <div class="change_station_form">
+	      <form action="/home" method="POST">
+		<input type="hidden" name="PID" value="{{station.identifier}}">
+		<button type="submit" value="Change" class="change_station_button">Change</button>
+	      </form>
+	    </div>
+	  </div>
+        % end
+
       % end
     </div>
+
   </body>
 </html>
