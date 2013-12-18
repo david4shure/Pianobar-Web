@@ -12,6 +12,7 @@ stations = {}
 music_playing = True
 current_station = ""
 first_login = True
+need_to_refresh_stations = True
 
 email = ""
 password = ""
@@ -42,7 +43,7 @@ def serve_static(filename):
 # authenticates credentials with pandora
 @post('/auth')
 def authenticate():
-    global proc 
+    global proc, email, password
     proc = None
     proc = subprocess.Popen("pianobar", stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
@@ -59,7 +60,7 @@ def authenticate():
 
     # This is what the login success line looks like
     if auth == "\x1b[2K(i) Login... Ok.\n":
-        global email, password
+
 
         email = local_email
         password = local_password
@@ -76,11 +77,10 @@ def authenticate():
 # user to kill any existing pianobar processes
 @get('/verify')
 def verify():
-    global email, password
+    global email, password, proc
     if email and password:
         ps_aux = subprocess.Popen("ps aux | grep pianobar", stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         output = ps_aux.stdout.readlines()
-        global proc
         for line in output:
             ps_aux_output = line.split()
             if ps_aux_output[10] == "pianobar" and not ps_aux_output[1] == str(proc.pid):
@@ -95,20 +95,17 @@ def verify():
 # home route
 @get('/home')
 def home():
-    global proc, stations, music_playing, current_station, first_login
+    global proc, stations, music_playing, current_station, first_login, need_to_refresh_stations
+
     if proc is None:
         redirect("/login")
-    raw_stations = read_all(proc.stdout)
-    try:
-        if len(stations[email]) == 0:
-            stations[email] = parse_stations(raw_stations)
-    except Exception, e:
+
+    if first_login or need_to_refresh_stations:
+        raw_stations = read_all(proc.stdout)
         stations[email] = parse_stations(raw_stations)
         current_station = stations[email][1].name
-
-    if first_login:
-        current_station = stations[email][1].name
         proc.stdin.write("1\n")
+        need_to_refresh_stations = False
 
     first_login = False
 
@@ -200,6 +197,10 @@ def read_all(file_object):
             signal.alarm(0)
     except Exception, e:
         return lines
+    
+def filter_lines(lines):
+    for line in lines:
+        print line
 
 def parse_stations(stations_array):
     station_list = []
