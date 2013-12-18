@@ -15,7 +15,7 @@
     color: #8C489F;
 }
 
-.logout_button {
+.banner_button {
    border: 1px solid #bdbfbd;
    background: #bdbfbd;
    background: -webkit-gradient(linear, left top, left bottom, from(#b1cca7), to(#a7c9a7));
@@ -33,14 +33,32 @@
    font-weight: bold;
    text-decoration: none;
    vertical-align: middle;
-   position: relative;
-   top: -64px;
-   left: 30px;
-   width: 60px;
-   height: 25px;
 }
 
-.logout_button:hover {
+#logout {
+    position: relative;
+    top: -64px;
+    left: 30px;
+    width: 60px;
+    height: 25px;
+}
+
+#volume_up {
+    position: relative;
+    top: -10.5em;
+    left: 29em;
+    width: 2em;
+}
+
+#volume_down {
+    position: relative;
+    top: -11.6em;
+    left: 29em;
+    width: 2em;
+
+}
+
+.banner_button:hover {
    border-color: #C0D9B9;
    background: #C0D9B9;
    color: #ffffff;
@@ -82,6 +100,15 @@
    color: #ffffff;
 }
 
+.increase_button {
+    position: relative;
+    left: 300px;
+}
+
+.decrease_button {
+    position: relative;
+    left: 350px;
+}
 
 .station {
     border: 2px solid #DDEAD9;

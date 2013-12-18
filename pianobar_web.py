@@ -110,6 +110,19 @@ def change_station():
     proc.stdin.write(new_station + "\n")
     redirect("/home")
 
+# decreases volume by three "notches"
+@post('/up')
+def increase_volume():
+    global proc
+    proc.stdin.write("))")
+    redirect("/home")
+
+# increases volume by three "notches"
+@post('/down')
+def decrease_volume():
+    global proc
+    proc.stdin.write("((")
+    redirect("/home")
 
 # kills any existing pianobar process that was already running
 @post('/kill')

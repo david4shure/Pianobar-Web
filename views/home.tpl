@@ -8,9 +8,16 @@
       <div class="current_user">{{current_user}}</div>
 
 	<form action="/logout" method="POST">
-	  <button type="submit" class="logout_button">Logout</button>
+	  <button type="submit" class="banner_button" id="logout">Logout</button>
 	</form>
 
+ 	<form action="/up" method="POST">
+	  <button type="submit" class="banner_button" id="volume_up">+</button>
+	</form>
+	
+	<form action="/down" method="POST">
+	  <button type="submit" class="banner_button" id="volume_down">-</button>
+	</form>
 
     </div>
 
