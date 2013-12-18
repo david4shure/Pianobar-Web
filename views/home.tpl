@@ -23,6 +23,18 @@
 	  <button type="submit" class="banner_button" id="change">{{"𝌆" if music_playing else "▶"}}
 	</form>
 
+	<form action="/skip" method="POST">
+	  <button type="submit" class="banner_button" id="skip">≫</button>
+	</form>
+
+	<form action="/thumbs_up" method="POST">
+	  <button type="submit" class="banner_button" id="thumbs_up">Love it</button>
+	</form>
+	
+	<form action="/thumbs_down" method="POST">
+	  <button type="submit" class="banner_button" id="thumbs_down">Ban it</button>
+	</form>
+	
     </div>
 
 

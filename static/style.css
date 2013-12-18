@@ -5,12 +5,13 @@
     background: linear-gradient(to left, #EBDDE2, #DDDDDD);
     position: relative;
     left: 0px;
-    width: 400px;
+    width: 500px;
     height: 75px;
 }
 
 .banner h2 {
-    text-align: center;
+    position: relative;
+    left: 100px;
     font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
     color: #8C489F;
 }
@@ -61,8 +62,31 @@
 #change {
     position: relative;
     top: -17em;
-    left:31.6em;
+    left:31.4em;
+    width: 3.2em;
+    height: 2.4em;
+}
+
+#skip {
+    position: relative;
+    top: -20.8em;
+    left: 25.5em;
+    height: 2.4em;
     width: 3em;
+}
+
+#thumbs_up {
+    position: relative;
+    top: -25.25em;
+    left: 39em;
+    width: 4.8em;
+}
+
+#thumbs_down {
+    position: relative;
+    top: -25.25em;
+    left: 39em;
+    width: 4.8em;
 }
 
 .banner_button:hover {
@@ -144,7 +168,7 @@
 
 .current_user {
     position: relative;
-    text-align: center;
+    left: 60px;
     font-size: 80%;
     font-weight: bold;
     top: -15px;

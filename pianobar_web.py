@@ -131,12 +131,23 @@ def skip():
     proc.stdin.write("n")
     redirect("/home")
 
-
 @post('/change')
 def playpause():
     global proc, music_playing
     music_playing = not music_playing
     proc.stdin.write("p")
+    redirect("/home")
+
+@post('/thumbs_up')
+def thumbs_up():
+    global proc
+    proc.stdin.write("+")
+    redirect("/home")
+
+@post('/thumbs_down')
+def thumbs_down():
+    global proc
+    proc.stdin.write("-")
     redirect("/home")
 
 # kills any existing pianobar process that was already running
