@@ -46,14 +46,14 @@
 
 #volume_up {
     position: relative;
-    top: -10.5em;
+    top: -10.4em;
     left: 29em;
     width: 2em;
 }
 
 #volume_down {
     position: relative;
-    top: -11.6em;
+    top: -11.5em;
     left: 29em;
     width: 2em;
 
@@ -61,7 +61,7 @@
 
 #change {
     position: relative;
-    top: -17em;
+    top: -16.8em;
     left:31.4em;
     width: 3.2em;
     height: 2.4em;
@@ -69,7 +69,7 @@
 
 #skip {
     position: relative;
-    top: -20.8em;
+    top: -20.7em;
     left: 25.5em;
     height: 2.4em;
     width: 3em;
@@ -77,14 +77,14 @@
 
 #thumbs_up {
     position: relative;
-    top: -25.25em;
+    top: -24.7em;
     left: 39em;
     width: 4.8em;
 }
 
 #thumbs_down {
     position: relative;
-    top: -25.25em;
+    top: -24.7em;
     left: 39em;
     width: 4.8em;
 }
