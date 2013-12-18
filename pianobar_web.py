@@ -93,6 +93,8 @@ def verify():
 @get('/home')
 def home():
     global proc, stations, music_playing
+    if proc is None:
+        redirect("/login")
     raw_stations = read_all(proc.stdout)
     try:
         if len(stations[email]) == 0:
@@ -204,6 +206,7 @@ class Station:
     # not very clever use of not regexes
     def parse(self, station_string):
         cleaned = station_string[4:-1]
+        print cleaned
         self.identifier = int(cleaned[cleaned.index("\t"):cleaned.index(")")].strip())
         split_station = cleaned.split()
         if (split_station[1] == "q" and split_station[2]):
