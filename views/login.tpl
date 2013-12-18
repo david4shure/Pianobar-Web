@@ -19,7 +19,7 @@
 	      <input type="password" name="password" placeholder="Password"/>
 	    </div>
 	    <div class="login_button">
-	      <input type="submit" value="Login">
+	      <button type="submit" class="banner_button">Login</button>
 	    </div>
 	  </form>
 	</div>

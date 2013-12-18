@@ -12,6 +12,28 @@
     height: 75px;
 }
 
+.kill_prompt {
+    position: relative;
+    left: 2em;
+    top: 3em;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.offending_process {
+    position: relative;
+    left: .2em;
+    top: 3.5em;
+    font-weight: bold;
+    color: #608341
+}
+
+#kill_proc {
+    position: relative;
+    top: 6em;
+    left: 19em;
+}
+
 .banner {
     border: 3px solid #C1CDCD;
     border-top-right-radius: 20px;
