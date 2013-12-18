@@ -127,8 +127,9 @@ def decrease_volume():
 # skips current track
 @post('/skip')
 def skip():
-    global proc
+    global proc, music_playing
     proc.stdin.write("n")
+    music_playing = True
     redirect("/home")
 
 @post('/change')
@@ -146,8 +147,9 @@ def thumbs_up():
 
 @post('/thumbs_down')
 def thumbs_down():
-    global proc
+    global proc, music_playing
     proc.stdin.write("-")
+    music_playing = True
     redirect("/home")
 
 # kills any existing pianobar process that was already running
