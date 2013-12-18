@@ -79,14 +79,14 @@
     position: relative;
     top: -24.7em;
     left: 39em;
-    width: 4.8em;
+    width: 5.1em;
 }
 
 #thumbs_down {
     position: relative;
     top: -24.7em;
     left: 39em;
-    width: 4.8em;
+    width: 5.1em;
 }
 
 .banner_button:hover {
@@ -97,7 +97,7 @@
 
 .stations {
     overflow-y: scroll;
-    height: 670px;
+    height: 620px;
     width: 315px;
     position: relative;
     top: 10px

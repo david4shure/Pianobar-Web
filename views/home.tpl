@@ -20,11 +20,11 @@
 	</form>
 
 	<form action="/change" method="POST">
-	  <button type="submit" class="banner_button" id="change">{{"𝌆" if music_playing else "▶"}}
+	  <button type="submit" class="banner_button" id="change"><strong>{{"||" if music_playing else "▶"}}</strong>
 	</form>
 
 	<form action="/skip" method="POST">
-	  <button type="submit" class="banner_button" id="skip">≫</button>
+	  <button type="submit" class="banner_button" id="skip">>></button>
 	</form>
 
 	<form action="/thumbs_up" method="POST">
