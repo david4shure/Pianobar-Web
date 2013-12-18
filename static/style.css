@@ -46,14 +46,14 @@
 
 #volume_up {
     position: relative;
-    top: -10.4em;
+    top: -10.8em;
     left: 29em;
     width: 2em;
 }
 
 #volume_down {
     position: relative;
-    top: -11.5em;
+    top: -11.9em;
     left: 29em;
     width: 2em;
 
@@ -61,7 +61,7 @@
 
 #change {
     position: relative;
-    top: -16.8em;
+    top: -17.3em;
     left:31.4em;
     width: 3.2em;
     height: 2.4em;
@@ -69,7 +69,7 @@
 
 #skip {
     position: relative;
-    top: -20.7em;
+    top: -21.1em;
     left: 25.5em;
     height: 2.4em;
     width: 3em;
@@ -77,14 +77,14 @@
 
 #thumbs_up {
     position: relative;
-    top: -24.7em;
+    top: -25.3em;
     left: 39em;
     width: 5.1em;
 }
 
 #thumbs_down {
     position: relative;
-    top: -24.7em;
+    top: -25.3em;
     left: 39em;
     width: 5.1em;
 }
@@ -97,7 +97,7 @@
 
 .stations {
     overflow-y: scroll;
-    height: 620px;
+    height: 680px;
     width: 315px;
     position: relative;
     top: 10px
