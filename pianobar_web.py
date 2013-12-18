@@ -203,16 +203,19 @@ class Station:
     def __init__(self, station_string):
         self.parse(station_string)
 
-    # not very clever use of not regexes
+    # not very clever (God awful) use of not regexes
     def parse(self, station_string):
         cleaned = station_string[4:-1]
-        print cleaned
         self.identifier = int(cleaned[cleaned.index("\t"):cleaned.index(")")].strip())
         split_station = cleaned.split()
-        if (split_station[1] == "q" and split_station[2]):
+        if (split_station[1].strip() == "q" and split_station[2]):
             self.name = split_station[2:-1]
         else:
             self.name = split_station[1:-1]
+        for i in range(0, len(split_station)):
+            if split_station[i] == "Q":
+                self.name = split_station[-1]
+                return
         self.name = " ".join(self.name)
 
 
