@@ -68,6 +68,19 @@
    vertical-align: middle;
 }
 
+#current_station_banner {
+    position: relative;
+    top: .9em;
+    width: 19.4em;
+}
+
+#current_station_text {
+    position: relative;
+    left: 1.7em;
+    color: #8C489F;
+    font-weight: bold;
+}
+
 #logout {
     position: relative;
     top: -64px;
@@ -129,10 +142,10 @@
 
 .stations {
     overflow-y: scroll;
-    height: 680px;
+    height: 640px;
     width: 315px;
     position: relative;
-    top: 10px
+    top: .2em;
 }
 
 .change_station_button {
@@ -197,6 +210,20 @@
 .change_station {
     position: relative;
     right: -190px;
+}
+
+@-webkit-keyframes pulse {
+    0% { border-color: #c397d0; }
+    51% { border-color: #C0D9B9; }
+    75% { border-color: #C0D9B9; }
+    100% { border-color: #c397d0; }
+}
+
+#current_station {
+    border-color: #C0D9B9;
+    -webkit-animation-name: pulse;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-duration: 4s;
 }
 
 .current_user {

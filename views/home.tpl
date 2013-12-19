@@ -37,6 +37,7 @@
 	
     </div>
 
+
     <div class="stations">
       % for station in user_stations:
       
@@ -58,6 +59,10 @@
         % end
 
       % end
+    </div>
+
+    <div class="banner" id="current_station_banner">
+      <div id="current_station_text">{{current_station}} Radio</div>
     </div>
 
   </body>
