@@ -1,5 +1,6 @@
 # David Shure
 # Pandora Bar (web interface for pianobar)
+# Built using bottle.py
 
 from bottle import *
 import subprocess
@@ -109,6 +110,7 @@ def home():
 
     return template("home", user_stations=stations[email], current_user=email, music_playing=music_playing, current_station=current_station)
 
+# self explainatory, route for changing stations
 @post('/home')
 def change_station():
     global proc, current_station, stations, email, music_playing
@@ -119,14 +121,14 @@ def change_station():
     music_playing = True
     redirect("/home")
 
-# decreases volume by three "notches"
+# decreases volume by two "notches"
 @post('/up')
 def increase_volume():
     global proc
     proc.stdin.write("))")
     redirect("/home")
 
-# increases volume by three "notches"
+# increases volume by two "notches"
 @post('/down')
 def decrease_volume():
     global proc
