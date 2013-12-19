@@ -219,7 +219,7 @@
     100% { border-color: #c397d0; }
 }
 
-#current_station {
+#current_station_banner {
     border-color: #C0D9B9;
     -webkit-animation-name: pulse;
     -webkit-animation-iteration-count: infinite;
