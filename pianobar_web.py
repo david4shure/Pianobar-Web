@@ -111,11 +111,12 @@ def home():
 
 @post('/home')
 def change_station():
-    global proc, current_station, stations, email
+    global proc, current_station, stations, email, music_playing
     new_station = request.forms.get("PID")
     proc.stdin.write("s")
     proc.stdin.write(new_station + "\n")
     current_station = stations[email][int(new_station)].name
+    music_playing = True
     redirect("/home")
 
 # decreases volume by three "notches"
