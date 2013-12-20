@@ -3,11 +3,9 @@
 # Built using bottle.py
 
 from bottle import *
-import subprocess
-import os
-import signal
-import time
+import subprocess, os, signal, time
 
+# Global variables
 proc = None
 stations = {}
 music_playing = True
@@ -26,6 +24,7 @@ def index():
 # checks if we are already logged in
 @get('/login')
 def login():
+    global proc
     if proc is not None:
         redirect("/home")
     else:
@@ -100,8 +99,7 @@ def home():
         redirect("/login")
 
     if first_login or need_to_refresh_stations:
-        raw_stations = read_all(proc.stdout)
-        stations[email] = parse_stations(raw_stations)
+        stations[email] = parse_stations(read_all(proc.stdout))
         current_station = stations[email][1].name
         proc.stdin.write("1\n")
         need_to_refresh_stations = False
@@ -226,6 +224,7 @@ class Station:
         else:
             self.name = split_station[1:-1]
         for i in range(0, len(split_station)):
+            # for QuickMix station
             if split_station[i] == "Q":
                 self.name = split_station[-1]
                 return
