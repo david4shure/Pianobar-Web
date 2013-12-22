@@ -105,6 +105,8 @@ def home():
         need_to_refresh_stations = False
 
     first_login = False
+    
+    print read_all(proc.stdout)
 
     return template("home", user_stations=stations[email], current_user=email, music_playing=music_playing, current_station=current_station)
 
