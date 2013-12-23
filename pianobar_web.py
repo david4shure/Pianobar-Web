@@ -14,6 +14,9 @@ current_station = ""
 first_login = True
 need_to_refresh_stations = True
 caffeine = None
+artist = None
+track = None
+album = None
 
 email = ""
 password = ""
@@ -95,7 +98,7 @@ def verify():
 # home route
 @get('/home')
 def home():
-    global proc, stations, music_playing, current_station, first_login, need_to_refresh_stations, caffeine
+    global proc, stations, music_playing, current_station, first_login, need_to_refresh_stations, caffeine, artist, track, album
 
     if caffeine is None:
         caffeine = Thread(target=stay_alive)
@@ -112,9 +115,20 @@ def home():
 
     first_login = False
     
-    print read_all(proc.stdout)
+    parse_now_playing(read_all(proc.stdout))
+
+    if artist is not None:
+        print "Artist: " + artist + " Track: " + track + " Album: " + album
 
     return template("home", user_stations=stations[email], current_user=email, music_playing=music_playing, current_station=current_station)
+
+@get('/current')
+def current_track():
+    global proc, artist, track, album
+    parse_now_playing(read_all(proc.stdout))
+    json_string = """{ "artist" : "%s", "track" : "%s", "album" : "%s" }""" % (artist, track, album)
+    return json_string
+
 
 # self explainatory, route for changing stations
 @post('/home')
@@ -157,7 +171,7 @@ def skip():
     music_playing = True
     redirect("/home")
 
-@post('/change')
+@post('/shift')
 def playpause():
     global proc, music_playing
     if proc is None:
@@ -233,6 +247,16 @@ def read_all(file_object):
 def filter_lines(lines):
     for line in lines:
         print line
+        
+def parse_now_playing(raw_lines):
+    print "Raw line: " + str(raw_lines)
+    if len(raw_lines) > 0 and "\" by \"" in raw_lines[-1] and "\" on \"" in raw_lines[-1]:
+        global artist, track, album
+        split = raw_lines[-1].split("\"")
+        print split
+        track = split[1]
+        artist = split[3]
+        album = split[5]
 
 def parse_stations(stations_array):
     station_list = []
