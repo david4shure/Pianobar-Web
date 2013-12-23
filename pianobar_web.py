@@ -3,7 +3,8 @@
 # Built using bottle.py
 
 from bottle import *
-import subprocess, os, signal, time
+from threading import Thread
+import subprocess, os, signal, time, urllib
 
 # Global variables
 proc = None
@@ -12,6 +13,7 @@ music_playing = True
 current_station = ""
 first_login = True
 need_to_refresh_stations = True
+caffeine = None
 
 email = ""
 password = ""
@@ -93,7 +95,11 @@ def verify():
 # home route
 @get('/home')
 def home():
-    global proc, stations, music_playing, current_station, first_login, need_to_refresh_stations
+    global proc, stations, music_playing, current_station, first_login, need_to_refresh_stations, caffeine
+
+    if caffeine is None:
+        caffeine = Thread(target=stay_alive)
+        caffeine.start()
 
     if proc is None:
         redirect("/login")
@@ -114,6 +120,8 @@ def home():
 @post('/home')
 def change_station():
     global proc, current_station, stations, email, music_playing
+    if proc is None:
+        redirect("/login")
     new_station = request.forms.get("PID")
     proc.stdin.write("s")
     proc.stdin.write(new_station + "\n")
@@ -125,6 +133,8 @@ def change_station():
 @post('/up')
 def increase_volume():
     global proc
+    if proc is None:
+        redirect("/login")
     proc.stdin.write("))")
     redirect("/home")
 
@@ -132,6 +142,8 @@ def increase_volume():
 @post('/down')
 def decrease_volume():
     global proc
+    if proc is None:
+        redirect("/login")
     proc.stdin.write("((")
     redirect("/home")
 
@@ -139,6 +151,8 @@ def decrease_volume():
 @post('/skip')
 def skip():
     global proc, music_playing
+    if proc is None:
+        redirect("/login")
     proc.stdin.write("n")
     music_playing = True
     redirect("/home")
@@ -146,6 +160,8 @@ def skip():
 @post('/change')
 def playpause():
     global proc, music_playing
+    if proc is None:
+        redirect("/login")
     music_playing = not music_playing
     proc.stdin.write("p")
     redirect("/home")
@@ -153,12 +169,16 @@ def playpause():
 @post('/thumbs_up')
 def thumbs_up():
     global proc
+    if proc is None:
+        redirect("/login")
     proc.stdin.write("+")
     redirect("/home")
 
 @post('/thumbs_down')
 def thumbs_down():
     global proc, music_playing
+    if proc is None:
+        redirect("/login")
     proc.stdin.write("-")
     music_playing = True
     redirect("/home")
@@ -174,14 +194,25 @@ def kill():
 @post('/logout')
 def logout():
     global proc, first_login, email, password
-    proc.terminate()
-    proc.wait()
-    proc = None
     stations[email] = []
     email = ""
     password = ""
     first_login = True
+    if proc is None:
+        redirect("/login")
+    else:
+        proc.terminate()
+        proc.wait()
+        proc = None
     redirect("/login")
+
+def stay_alive(): # please
+    while True:
+        try:
+            request = urllib.urlopen("http://192.168.1.119:8080/home")
+            time.sleep(30)
+        except Exception, e:
+            continue
 
 def signal_handler(signum, frame):
     raise Exception("! readline() took too long !")
