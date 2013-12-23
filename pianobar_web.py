@@ -221,10 +221,12 @@ def logout():
     redirect("/login")
 
 def stay_alive(): # please
+    global proc
     while True:
         try:
-            request = urllib.urlopen("http://192.168.1.119:8080/home")
-            time.sleep(30)
+            if proc is not None:
+                request = urllib.urlopen("http://192.168.1.119:8080/home")
+                time.sleep(30)
         except Exception, e:
             continue
 
