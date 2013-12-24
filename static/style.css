@@ -1,3 +1,5 @@
+body {background-attachment: fixed;}
+
 #main_banner {
     position: relative;
     left: 0px;
@@ -70,7 +72,7 @@
 
 #current_station_banner {
     position: relative;
-    top: 1em;
+    top: -2.5em;
     width: 19.4em;
 }
 
@@ -145,7 +147,7 @@
     height: 640px;
     width: 315px;
     position: relative;
-    top: .5em;
+    top: -3.9em;
 }
 
 .change_station_button {
@@ -237,10 +239,10 @@
 
 #current {
     position: relative;
-    width: 31.5em;
-    height: 75px;
-    right: -56em;
-    top: -46.7em;
+    right: -57.5em;
+    width: 30em;
+    height: 4.7em;
+    top: -5em;
 }
 
 #current #artist {
