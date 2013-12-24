@@ -120,7 +120,9 @@ def home():
     if artist is not None:
         print "Artist: " + artist + " Track: " + track + " Album: " + album
 
-    return template("home", user_stations=stations[email], current_user=email, music_playing=music_playing, current_station=current_station)
+    now_playing = { "track": track, "artist": artist, "album": album }
+
+    return template("home", user_stations=stations[email], current_user=email, music_playing=music_playing, current_station=current_station, now_playing=now_playing)
 
 @get('/current.json')
 def current_track():

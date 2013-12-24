@@ -95,9 +95,9 @@
     </div>
 
     <div class="banner" id="current">
-      <div id="artist"></div>
-      <div id="track"></div>
-      <div id="album"></div>
+      <div id="artist">{{now_playing["artist"]}}</div>
+      <div id="track">{{now_playing["track"]}}</div>
+      <div id="album">{{now_playing["album"]}}</div>
     </div>
 
     <script type="text/javascript">ajax_get_json();</script>
