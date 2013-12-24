@@ -70,7 +70,7 @@
 
 #current_station_banner {
     position: relative;
-    top: .9em;
+    top: 1em;
     width: 19.4em;
 }
 
@@ -145,7 +145,7 @@
     height: 640px;
     width: 315px;
     position: relative;
-    top: .2em;
+    top: .5em;
 }
 
 .change_station_button {
@@ -233,6 +233,29 @@
     font-size: 80%;
     font-weight: bold;
     top: -15px;
+}
+
+#current {
+    position: relative;
+    width: 31.5em;
+    height: 75px;
+    right: -56em;
+    top: -46.7em;
+}
+
+#current #artist {
+    color: #8C489F;
+    font-weight: bold;
+    font-size: 150%;
+    text-align: center;
+}
+
+#current #album {
+    text-align: center;
+}
+
+#current #track {
+    text-align: center;
 }
 
 .station_id {

@@ -1,6 +1,33 @@
 <html>
   <head>
+    <title>Pandora Bar</title>
     <link href="/static/style.css" rel="stylesheet" type="text/css">
+
+    <script type="text/javascript">
+
+      function ajax_get_json() {
+          var hr = new XMLHttpRequest();
+          var track = document.getElementById("track");
+          var album = document.getElementById("album");
+          var artist = document.getElementById("artist");
+          hr.open("GET", "current.json", true);
+          hr.onreadystatechange = function () {
+              if (hr.readyState == 4 && hr.status == 200) {
+                  var data = JSON.parse(hr.responseText);
+                  if (track.innerHTML != data.track) {
+                      track.innerHTML = data.track;
+                      album.innerHTML = data.album;
+                      artist.innerHTML = data.artist;
+                  }
+              }
+          }
+
+          hr.send(null);
+          setTimeout(ajax_get_json, 10000)
+      }
+
+    </script>
+
   </head>
   <body>
     <div class="banner" id="main_banner">
@@ -38,6 +65,8 @@
     </div>
 
 
+
+
     <div class="stations">
       % for station in user_stations:
       
@@ -64,6 +93,14 @@
     <div class="banner" id="current_station_banner">
       <div id="current_station_text">{{current_station}} Radio</div>
     </div>
+
+    <div class="banner" id="current">
+      <div id="artist"></div>
+      <div id="track"></div>
+      <div id="album"></div>
+    </div>
+
+    <script type="text/javascript">ajax_get_json();</script>
 
   </body>
 </html>

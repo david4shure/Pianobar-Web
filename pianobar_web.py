@@ -98,7 +98,7 @@ def verify():
 # home route
 @get('/home')
 def home():
-    global proc, stations, music_playing, current_station, first_login, need_to_refresh_stations, caffeine, artist, track, album
+    global proc, stations, music_playing, current_station, first_login, need_to_refresh_stations, artist, track, album, caffeine
 
     if caffeine is None:
         caffeine = Thread(target=stay_alive)
@@ -122,12 +122,12 @@ def home():
 
     return template("home", user_stations=stations[email], current_user=email, music_playing=music_playing, current_station=current_station)
 
-@get('/current')
+@get('/current.json')
 def current_track():
     global proc, artist, track, album
+    
     parse_now_playing(read_all(proc.stdout))
-    json_string = """{ "artist" : "%s", "track" : "%s", "album" : "%s" }""" % (artist, track, album)
-    return json_string
+    return """{ "artist" : "%s", "track" : "%s", "album" : "%s" }""" % (artist, track, album)
 
 
 # self explainatory, route for changing stations
