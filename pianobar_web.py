@@ -227,8 +227,8 @@ def stay_alive(): # please
     while True:
         try:
             if proc is not None:
-                request = urllib.urlopen("http://192.168.1.119:8080/home")
-                time.sleep(30)
+                request = urllib.urlopen("http://192.168.1.119:8080/current.json")
+                time.sleep(90)
         except Exception, e:
             continue
 
@@ -253,9 +253,10 @@ def filter_lines(lines):
         print line
         
 def parse_now_playing(raw_lines):
+    global artist, track, album
     print "Raw line: " + str(raw_lines)
     if len(raw_lines) > 0 and "\" by \"" in raw_lines[-1] and "\" on \"" in raw_lines[-1]:
-        global artist, track, album
+
         split = raw_lines[-1].split("\"")
         print split
         track = split[1]
