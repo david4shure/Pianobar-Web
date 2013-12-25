@@ -1,4 +1,4 @@
-body {background-attachment: fixed;}
+body {max-height: 10em;}
 
 #main_banner {
     position: relative;
@@ -72,7 +72,7 @@ body {background-attachment: fixed;}
 
 #current_station_banner {
     position: relative;
-    top: -2.5em;
+    top: -9em;
     width: 19.4em;
 }
 
@@ -147,7 +147,7 @@ body {background-attachment: fixed;}
     height: 640px;
     width: 315px;
     position: relative;
-    top: -3.9em;
+    top: -9.9em;
 }
 
 .change_station_button {
@@ -239,24 +239,25 @@ body {background-attachment: fixed;}
 
 #current {
     position: relative;
-    right: -57.5em;
-    width: 30em;
-    height: 4.7em;
-    top: -5em;
+    right: -32.5em;
+    max-width: 37em;
+    min-height: 10em;
+    max-height: 10em;
+    top: 1.5em;
 }
 
-#current #artist {
+#artist {
     color: #8C489F;
     font-weight: bold;
     font-size: 150%;
     text-align: center;
 }
 
-#current #album {
+#album {
     text-align: center;
 }
 
-#current #track {
+#track {
     text-align: center;
 }
 

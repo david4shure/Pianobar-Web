@@ -64,7 +64,7 @@
 	
     </div>
 
-    <div class="banner" id="current">
+    <div id="current" class="">
       <div id="artist">{{now_playing["artist"]}}</div>
       <div id="track">{{now_playing["track"]}}</div>
       <div id="album">{{now_playing["album"]}}</div>
