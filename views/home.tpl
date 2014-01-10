@@ -2,6 +2,7 @@
   <head>
     <title>Pandora Bar</title>
     <link href="/static/style.css" rel="stylesheet" type="text/css">
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
 
     <script type="text/javascript">
 

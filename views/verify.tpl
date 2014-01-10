@@ -1,6 +1,7 @@
 <html>
   <head>
     <link href="/static/style.css" rel="stylesheet" type="text/css">
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
   </head>
   <body>
     <div class="content">

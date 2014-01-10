@@ -227,8 +227,9 @@ def stay_alive(): # please
     while True:
         try:
             if proc is not None:
-                request = urllib.urlopen("http://192.168.1.119:8080/current.json")
                 time.sleep(90)
+                request = urllib.urlopen("http://10.21.129.63:8080/current.json")
+
         except Exception, e:
             continue
 
@@ -254,7 +255,6 @@ def filter_lines(lines):
         
 def parse_now_playing(raw_lines):
     global artist, track, album
-    print "Raw line: " + str(raw_lines)
     if len(raw_lines) > 0 and "\" by \"" in raw_lines[-1] and "\" on \"" in raw_lines[-1]:
 
         split = raw_lines[-1].split("\"")
@@ -293,4 +293,4 @@ class Station:
         self.name = " ".join(self.name)
 
 
-run(host="192.168.1.119", port=8080, debug=True)
+run(host="10.21.129.63", port=8080, debug=True)
