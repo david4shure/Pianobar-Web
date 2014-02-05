@@ -293,4 +293,4 @@ class Station:
         self.name = " ".join(self.name)
 
 
-run(host="10.21.129.63", port=8080, debug=True)
+run(host="0.0.0.0", port=8080, debug=True)
