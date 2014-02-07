@@ -228,7 +228,7 @@ def stay_alive(): # please
         try:
             if proc is not None:
                 time.sleep(90)
-                request = urllib.urlopen("http://10.21.129.63:8080/current.json")
+                request = urllib.urlopen("http://0.0.0.0:8080/current.json")
 
         except Exception, e:
             continue
