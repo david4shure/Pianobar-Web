@@ -2,6 +2,7 @@
   <head>
     <link href="/static/bootstrap.css" rel="stylesheet" type="text/css">
     <link href="/static/bootstrap-theme.css" rel="stylesheet" type="text/css">
+    <link href="/static/custom.css" rel="stylesheet" type="text/css">
     <script src="/static/bootstrap.js"></script>
     <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
   </head>
@@ -15,18 +16,18 @@
     % end
 
     <div class="container">
-      <div class="jumbotron" style="text-align:center;margin-top:60px;padding-bottom:180px;">
+      <div class="jumbotron">
         <h1>Pandora Bar</h1>
         <p>Welcome to the Pandora Bar. Log in with your Pandora credentials to get started.</p>
 
-        <form role="form" action="/auth" method="post" style="width:200px;position:fixed;left:50%;margin-left:-100px;">
+        <form role="form" action="/auth" method="post" id="login-form">
           <div class="form-group">
             <input type="text" name="email" class="form-control" placeholder="Email Address">
           </div>
           <div class="form-group">
             <input type="password" name="password" class="form-control" placeholder="Password">
           </div>
-          <button type="submit" class="btn btn-success">Come on In</button>
+          <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-star-empty"></span> Come on in</button>
         </form>
       </div>
     </div>

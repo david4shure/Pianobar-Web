@@ -1,0 +1,12 @@
+.jumbotron {
+  text-align:center;
+  margin-top:60px;
+  padding-bottom:180px;
+}
+
+#login-form {
+  width:200px;
+  position:fixed;
+  left:50%;
+  margin-left:-100px;
+}
