@@ -133,12 +133,12 @@ def current_track():
 
 
 # self explainatory, route for changing stations
-@post('/home')
-def change_station():
+@get('/home/:station')
+def change_station(station):
     global proc, current_station, stations, email, music_playing
     if proc is None:
         redirect("/login")
-    new_station = request.forms.get("PID")
+    new_station = station
     proc.stdin.write("s")
     proc.stdin.write(new_station + "\n")
     current_station = stations[email][int(new_station)].name
@@ -146,7 +146,7 @@ def change_station():
     redirect("/home")
 
 # decreases volume by two "notches"
-@post('/up')
+@get('/up')
 def increase_volume():
     global proc
     if proc is None:
@@ -155,7 +155,7 @@ def increase_volume():
     redirect("/home")
 
 # increases volume by two "notches"
-@post('/down')
+@get('/down')
 def decrease_volume():
     global proc
     if proc is None:
@@ -164,7 +164,7 @@ def decrease_volume():
     redirect("/home")
 
 # skips current track
-@post('/skip')
+@get('/skip')
 def skip():
     global proc, music_playing
     if proc is None:
@@ -173,7 +173,7 @@ def skip():
     music_playing = True
     redirect("/home")
 
-@post('/shift')
+@get('/shift')
 def playpause():
     global proc, music_playing
     if proc is None:
@@ -182,7 +182,7 @@ def playpause():
     proc.stdin.write("p")
     redirect("/home")
 
-@post('/thumbs_up')
+@get('/thumbs_up')
 def thumbs_up():
     global proc
     if proc is None:
@@ -190,7 +190,7 @@ def thumbs_up():
     proc.stdin.write("+")
     redirect("/home")
 
-@post('/thumbs_down')
+@get('/thumbs_down')
 def thumbs_down():
     global proc, music_playing
     if proc is None:
@@ -207,7 +207,7 @@ def kill():
     redirect("/verify")
 
 # logs user out, and terminates the pianobar process spawned by user
-@post('/logout')
+@get('/logout')
 def logout():
     global proc, first_login, email, password
     stations[email] = []
