@@ -88,13 +88,13 @@
             </aside>
 
             <section class="main-section panel">
-              <h4><span id="title">{{ now_playing["artist"] }} - {{ now_playing["track"] }}</h4>
+              <h4><span id="title">{{ now_playing["artist"] }} - {{ now_playing["track"] }} <small>from <i>{{ now_playing["album"] }}</i></small></h4>
               <div class="row">
                 <div class="medium-3 columns show-for-medium-up">
-                  <img src="http://placehold.it/300x300">
+                  <img id="album" src="http://placehold.it/300x300">
                 </div>
                 <div class="medium-9 columns">
-                  <p>Tempor McSweeney's Echo Park quis polaroid kale chips. Sustainable quinoa officia, anim art party keytar Bushwick hashtag delectus 90's wayfarers ugh artisan pour-over cred. Scenester raw denim laboris proident, hoodie irony sint Odd Future leggings Carles consequat sunt polaroid id. Accusamus Echo Park kogi aesthetic church-key laboris. Odio ethical distillery, bespoke synth flexitarian YOLO. Eu meh lo-fi, occaecat delectus fixie small batch. Consectetur bitters non flannel aliqua vero.</p>
+                  <p id="bio">Loading...</p>
                 </div>
               </div>
           </section>
@@ -115,12 +115,41 @@
       function now_playing() {
         $.getJSON('/current.json', function(data) {
           if ( track != data.track ) {
-            $('#title').html(data.artist + ' - ' + data.track)
+            $('#title').html(data.artist + ' - ' + data.track + ' <small>from <i>' + data.album + '</i></small>')
+            artist_info(data.artist);
+            album_info(data.artist, data.album);
+            track = data.track;
+          }
+        });
+      }
+
+      function artist_info(artist) {
+        $.getJSON('http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=' + escape(artist) + '&api_key=a0cdf76d44c313ba809c1f1afb312240&format=json', function(data) {
+          var bio = data.artist.bio.content.split("\n");
+          if (typeof bio[1] != 'undefined') {
+            $('#bio').html([bio[1].replace(/(<([^>]+)>)/ig,""), bio[3]].join("<br><br>"));
+          } else {
+            $('#bio').html("No bio available for this artist.");
+          }
+        });
+      }
+
+      function album_info(artist, album) {
+        $.getJSON('http://ws.audioscrobbler.com/2.0/?method=album.getinfo&artist=' + escape(artist) + '&album=' + escape(album) + '&api_key=a0cdf76d44c313ba809c1f1afb312240&format=json', function(data) {
+          art = data.album.image[3]['#text'];
+          if (typeof art != 'undefined') {
+            console.log(art);
+            $('#album').attr('src', art);
+          } else {
+            $('#album').attr('src', "http://placehold.it/300&text=no+album+art+available");
           }
         });
       }
 
       var checker = window.setInterval(now_playing, 1000);
+
+      artist_info("{{ now_playing['artist'] }}");
+      album_info("{{ now_playing['artist'] }}", "{{ now_playing['album'] }}");
     </script>
 
   </body>
