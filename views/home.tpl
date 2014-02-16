@@ -1,8 +1,10 @@
 <html>
   <head>
     <title>Pandora Bar</title>
-    <link href="/static/style.css" rel="stylesheet" type="text/css">
-    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+
+    <link href="/static/foundation.min.css" rel="stylesheet" type="text/css">
+    <link href="/static/foundation-glyphicons.css" rel="stylesheet" type="text/css">
+
 
     <script type="text/javascript">
 
@@ -29,9 +31,106 @@
 
     </script>
 
+    <style>
+      .no-margin {
+        margin:0px 0px 0px 0px;
+      }
+      </style>
+
   </head>
   <body>
-    <div class="banner" id="main_banner">
+
+    <!-- header/controls -->
+    <div class="row">
+      <div class="medium-3 columns">
+        <div class="show-for-medium-up" style="height:38px"></div>
+        <h1>Piano Bar</h1>
+      </div>
+      <div class="small-12 medium-7 columns">
+        <fieldset>
+          <legend>Controls</legend>
+          <div class="button-bar">
+            <ul class="button-group" style="margin-bottom:0px">
+              <li><a href="/shift" class="tiny button no-margin" data-remote="true">
+                <span class="gicon-white gicon-play"></span>
+
+                <span class="gicon-white gicon-pause"></a>
+                </li>
+              <li><a href="/skip" class="tiny button no-margin" data-remote="true">
+                <span class="gicon-white gicon-fast-forward"></a>
+                </li>
+            </ul>
+            <ul class="button-group">
+              <li><a href="/thumbs_up" class="tiny button no-margin" data-remote="true">
+                <span class="gicon-white gicon-ok"></a>
+                </li>
+              <li><a href="/thumbs_down" class="tiny button no-margin" data-remote="true">
+                <span class="gicon-white gicon-remove"></a>
+                </li>
+            </ul>
+            <ul class="button-group">
+              <li><a href="/down" class="tiny button no-margin">
+                <span class="gicon-white gicon-volume-down"></a>
+                </li>
+              <li><a href="/up" class="tiny button no-margin" data-remote="true">
+                <span class="gicon-white gicon-volume-up"></a>
+                </li>
+            </ul>
+            <ul class="button-group">
+              <li><a href="/logout" class="tiny button no-margin">
+                <span class="gicon-white gicon-eject"></a>
+                </li>
+            </ul>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+    
+    <!-- main body -->
+    <div class="row">
+      <div class="medium-12 columns">
+        <div class="off-canvas-wrap">
+          <div class="inner-wrap">
+             <nav class="tab-bar">
+                <section class="left-small">
+                  <a class="left-off-canvas-toggle menu-icon" ><span></span></a>
+                </section>
+
+                <section class="middle tab-bar-section">
+                  <h1 class="title">{{current_station}} Radio</h1>
+                </section>
+<!-- 
+                <section class="right-small">
+                  <a class="right-off-canvas-toggle menu-icon" ><span></span></a>
+                </section> -->
+              </nav>
+
+            <!-- Off Canvas Menu -->
+            <aside class="left-off-canvas-menu">
+                <!-- whatever you want goes here -->
+                <ul>
+                  <li><a href="#">Item 1</a></li>
+                ...
+                </ul>
+            </aside>
+
+            <!-- main content goes here -->
+            <p>Tempor McSweeney's Echo Park quis polaroid kale chips. Sustainable quinoa officia, anim art party keytar Bushwick hashtag delectus 90's wayfarers ugh artisan pour-over cred. Scenester raw denim laboris proident, hoodie irony sint Odd Future leggings Carles consequat sunt polaroid id. Accusamus Echo Park kogi aesthetic church-key laboris. Odio ethical distillery, bespoke synth flexitarian YOLO. Eu meh lo-fi, occaecat delectus fixie small batch. Consectetur bitters non flannel aliqua vero.</p>
+
+          <!-- close the off-canvas menu -->
+          <a class="exit-off-canvas"></a>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <script src="/static/jquery.js"></script>
+    <script src="/static/foundation.min.js"></script>
+    <script>$(document).foundation();</script>
+
+    <!-- <div class="banner" id="main_banner">
       <h2>Pandora Bar</h2>
       <div class="current_user">{{current_user}}</div>
 
@@ -96,10 +195,10 @@
 
     <div class="banner" id="current_station_banner">
       <div id="current_station_text">{{current_station}} Radio</div>
-    </div>
+    </div> -->
 
-
+<!-- 
     <script type="text/javascript">ajax_get_json();</script>
-
+ -->
   </body>
 </html>

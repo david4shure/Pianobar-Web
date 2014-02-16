@@ -27,5 +27,6 @@
     </div>
     <script src="/static/jquery.js"></script>
     <script src="/static/foundation.min.js"></script>
+    <script>$(document).foundation();</script>
   </body>
 </html>
