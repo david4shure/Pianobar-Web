@@ -70,7 +70,7 @@
                 <a class="left-off-canvas-toggle menu-icon" ><span></span></a>
               </section>
               <section class="middle tab-bar-section">
-                <h1 class="title">{{current_station}} Radio</h1>
+                <h1 class="title">{{ current_station }} Radio</h1>
               </section>
             </nav>
 
@@ -79,16 +79,16 @@
                 <li><label>Stations:</label></li>
               % for station in user_stations:
                 % if station.name == current_station:
-                <li><a href="#">{{station.name}}</a></li>
+                <li><a href="#">{{ station.name }}</a></li>
                 % else:
-                <li><a href="/home/{{station.identifier}}">{{station.name}}</a></li>
+                <li><a href="/home/{{ station.identifier }}">{{ station.name }}</a></li>
                 % end
               % end
               </ul>
             </aside>
 
             <section class="main-section panel">
-              <h4><span id="artist">{{now_playing["artist"]}} - {{now_playing["track"]}}</h4>
+              <h4><span id="title">{{ now_playing["artist"] }} - {{ now_playing["track"] }}</h4>
               <div class="row">
                 <div class="medium-3 columns show-for-medium-up">
                   <img src="http://placehold.it/300x300">
@@ -104,36 +104,24 @@
       </div>
     </div>
 
-
+    <!-- js -->
     <script src="/static/jquery.js"></script>
     <script src="/static/foundation.min.js"></script>
     <script>$(document).foundation();</script>
 
     <script type="text/javascript">
-      function ajax_get_json() {
-          var hr = new XMLHttpRequest();
-          var track = document.getElementById("track");
-          var album = document.getElementById("album");
-          var artist = document.getElementById("artist");
-          hr.open("GET", "current.json", true);
-          hr.onreadystatechange = function () {
-              if (hr.readyState == 4 && hr.status == 200) {
-                  var data = JSON.parse(hr.responseText);
-                  if (track.innerHTML != data.track) {
-                      track.innerHTML = data.track;
-                      album.innerHTML = data.album;
-                      artist.innerHTML = data.artist;
-                  }
-              }
-          }
+      var track = "{{ now_playing["track"] }}";
 
-          hr.send(null);
-          setTimeout(ajax_get_json, 10000)
+      function now_playing() {
+        $.getJSON('/current.json', function(data) {
+          if ( track != data.track ) {
+            $('#title').html(data.artist + ' - ' + data.track)
+          }
+        });
       }
 
+      var checker = window.setInterval(now_playing, 1000);
     </script>
-
-    <script type="text/javascript">ajax_get_json();</script>
 
   </body>
 </html>
