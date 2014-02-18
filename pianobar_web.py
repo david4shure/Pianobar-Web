@@ -266,9 +266,6 @@ def parse_now_playing(raw_lines):
         tent_artist = split[1]
         tent_album = split[2]
 
-        print repr("tent_track: " + tent_track)
-        print repr("tent_artist: " + tent_artist)
-        print repr("tent_album: " + tent_album)
 
         if tent_track[0] == "\"":
             tent_track = tent_track[1:]
@@ -288,6 +285,11 @@ def parse_now_playing(raw_lines):
         album = tent_album
         artist = tent_artist
         track = tent_track
+
+        print repr("Track: " + track)
+        print repr("Artist: " + artist)
+        print repr("Album: " + album)
+
        
 
 def parse_stations(stations_array):
