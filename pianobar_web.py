@@ -230,7 +230,8 @@ def stay_alive(): # please
         try:
             if proc is not None:
                 time.sleep(90)
-                request = urllib.urlopen("http://0.0.0.0:8080/current.json")
+                print read_all(proc.stdin)
+                print read_all(proc.stdout)
 
         except Exception, e:
             continue
