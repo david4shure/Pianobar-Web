@@ -51,6 +51,8 @@ def authenticate():
     global proc, email, password
     proc = None
     proc = subprocess.Popen("pianobar", stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if proc is None:
+        print "Something went wrong. Proc is none"
 
     local_email = request.forms.get("email")
     local_password = request.forms.get("password")
@@ -257,11 +259,12 @@ def parse_now_playing(raw_lines):
     global artist, track, album
     if len(raw_lines) > 0 and "\" by \"" in raw_lines[-1] and "\" on \"" in raw_lines[-1]:
 
-        split = raw_lines[-1].split("\"")
+        cleaned_up = raw_lines[-1][raw_lines[-1].index("\""):-1]
+        split = cleaned_up.replace("\" by \"", " | ").replace("\" on \"", " | ").split(" | ")
         print split
-        track = split[1]
-        artist = split[3]
-        album = split[5]
+        track = split[0].replace("\"", "")
+        artist = split[1].replace("\"", "")
+        album = split[2]
 
 def parse_stations(stations_array):
     station_list = []
