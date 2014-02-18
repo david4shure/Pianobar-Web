@@ -258,13 +258,37 @@ def filter_lines(lines):
 def parse_now_playing(raw_lines):
     global artist, track, album
     if len(raw_lines) > 0 and "\" by \"" in raw_lines[-1] and "\" on \"" in raw_lines[-1]:
-
         cleaned_up = raw_lines[-1][raw_lines[-1].index("\""):-1]
+        print "Before: " + str(cleaned_up)
         split = cleaned_up.replace("\" by \"", " | ").replace("\" on \"", " | ").split(" | ")
-        print split
-        track = split[0].replace("\"", "")
-        artist = split[1].replace("\"", "")
-        album = split[2].replace("\"", "")
+
+        tent_track = split[0]
+        tent_artist = split[1]
+        tent_album = split[2]
+
+        print repr("tent_track: " + tent_track)
+        print repr("tent_artist: " + tent_artist)
+        print repr("tent_album: " + tent_album)
+
+        if tent_track[0] == "\"":
+            tent_track = tent_track[1:]
+        if tent_track[-1] == "\"":
+            tent_track = tent_track[0:-1]
+
+        if tent_artist[0] == "\"":
+            tent_artist = tent_artist[1:]
+        if tent_artist[-1] == "\"":
+            tent_artist = tent_artist[0:-1]
+
+        if tent_album[0] == "\"":
+            tent_album = tent_album[1:]
+        if tent_album[-1] == "\"":
+            tent_album = tent_album[0:-1]
+
+        album = tent_album
+        artist = tent_artist
+        track = tent_track
+       
 
 def parse_stations(stations_array):
     station_list = []
