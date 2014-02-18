@@ -18,7 +18,7 @@
     <div class="row">
       <div class="medium-3 columns">
         <div class="show-for-medium-up" style="height:38px"></div>
-        <h1>Piano Bar</h1>
+        <h1>Pandora Bar</h1>
       </div>
       <div class="small-12 medium-7 columns">
         <fieldset>
