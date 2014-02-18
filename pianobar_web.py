@@ -264,7 +264,7 @@ def parse_now_playing(raw_lines):
         print split
         track = split[0].replace("\"", "")
         artist = split[1].replace("\"", "")
-        album = split[2]
+        album = split[2].replace("\"", "")
 
 def parse_stations(stations_array):
     station_list = []
