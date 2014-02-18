@@ -17,6 +17,7 @@ caffeine = None
 artist = None
 track = None
 album = None
+logged_out = True
 
 email = ""
 password = ""
@@ -100,7 +101,7 @@ def verify():
 # home route
 @get('/home')
 def home():
-    global proc, stations, music_playing, current_station, first_login, need_to_refresh_stations, artist, track, album, caffeine
+    global proc, stations, music_playing, current_station, first_login, need_to_refresh_stations, artist, track, album, caffeine, logged_out
 
     if caffeine is None:
         caffeine = Thread(target=stay_alive)
@@ -110,6 +111,7 @@ def home():
         redirect("/login")
 
     if first_login or need_to_refresh_stations:
+        print stations
         stations[email] = parse_stations(read_all(proc.stdout))
         current_station = stations[email][1].name
         proc.stdin.write("1\n")
@@ -124,13 +126,16 @@ def home():
 
     now_playing = { "track": track, "artist": artist, "album": album }
 
+    logged_out = False
+
     return template("home", user_stations=stations[email], current_user=email, music_playing=music_playing, current_station=current_station, now_playing=now_playing)
 
 @get('/current.json')
 def current_track():
-    global proc, artist, track, album
+    global proc, artist, track, album, logged_out
     
-    parse_now_playing(read_all(proc.stdout))
+    if not logged_out:
+        parse_now_playing(read_all(proc.stdout))
     return """{ "artist" : "%s", "track" : "%s", "album" : "%s" }""" % (artist, track, album)
 
 
@@ -211,7 +216,10 @@ def kill():
 # logs user out, and terminates the pianobar process spawned by user
 @get('/logout')
 def logout():
-    global proc, first_login, email, password
+    global proc, first_login, email, password, artist, track, album, logged_out
+    artist = None
+    album = None
+    track = None
     stations[email] = []
     email = ""
     password = ""
@@ -222,16 +230,17 @@ def logout():
         proc.terminate()
         proc.wait()
         proc = None
+    logged_out = True
     redirect("/login")
 
 def stay_alive(): # please
     global proc
     while True:
         try:
-            if proc is not None:
+            if proc is not None and not logged_out:
                 time.sleep(90)
-                print read_all(proc.stdin)
-                print read_all(proc.stdout)
+                read_all(proc.stdin)
+                read_all(proc.stdout)
 
         except Exception, e:
             continue
