@@ -146,7 +146,7 @@
         });
       }
 
-      var checker = window.setInterval(now_playing, 1000);
+      var checker = window.setInterval(now_playing, 5000);
 
       artist_info("{{ now_playing['artist'] }}");
       album_info("{{ now_playing['artist'] }}", "{{ now_playing['album'] }}");
