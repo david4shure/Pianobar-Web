@@ -111,7 +111,6 @@ def home():
         redirect("/login")
 
     if first_login or need_to_refresh_stations:
-        print stations
         refreshed_stations = parse_stations(read_all(proc.stdout))
         try:
             stations[email] == refreshed_stations
