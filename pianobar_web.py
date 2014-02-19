@@ -17,7 +17,7 @@ caffeine = None
 artist = None
 track = None
 album = None
-logged_out = True
+can_read_proc = False
 
 email = ""
 password = ""
@@ -101,7 +101,7 @@ def verify():
 # home route
 @get('/home')
 def home():
-    global proc, stations, music_playing, current_station, first_login, need_to_refresh_stations, artist, track, album, caffeine, logged_out
+    global proc, stations, music_playing, current_station, first_login, need_to_refresh_stations, artist, track, album, caffeine, can_read_proc, email
 
     if caffeine is None:
         caffeine = Thread(target=stay_alive)
@@ -112,30 +112,38 @@ def home():
 
     if first_login or need_to_refresh_stations:
         print stations
-        stations[email] = parse_stations(read_all(proc.stdout))
-        current_station = stations[email][1].name
-        proc.stdin.write("1\n")
+        refreshed_stations = parse_stations(read_all(proc.stdout))
+        try:
+            stations[email] == refreshed_stations
+        except KeyError, e:
+            stations[email] = refreshed_stations
+        current_station = stations[email][0].name
+        if not len(stations[email]) == 0:
+            proc.stdin.write("0\n")
         need_to_refresh_stations = False
 
     first_login = False
     
     parse_now_playing(read_all(proc.stdout))
+    can_read_proc = True
 
     if artist is not None:
         print "Artist: " + artist + " Track: " + track + " Album: " + album
 
     now_playing = { "track": track, "artist": artist, "album": album }
 
-    logged_out = False
-
     return template("home", user_stations=stations[email], current_user=email, music_playing=music_playing, current_station=current_station, now_playing=now_playing)
 
 @get('/current.json')
 def current_track():
-    global proc, artist, track, album, logged_out
-    
-    if not logged_out:
+    global proc, artist, track, album, can_read_proc
+
+    if proc is not None and can_read_proc:
         parse_now_playing(read_all(proc.stdout))
+        print "Reading from proc.."
+    else:
+        print "Not reading from proc.."
+    print "Artist: " + str(artist) + "\t Album: " + str(album) + "\t Track: " + str(track)
     return """{ "artist" : "%s", "track" : "%s", "album" : "%s" }""" % (artist, track, album)
 
 
@@ -216,11 +224,10 @@ def kill():
 # logs user out, and terminates the pianobar process spawned by user
 @get('/logout')
 def logout():
-    global proc, first_login, email, password, artist, track, album, logged_out
+    global proc, first_login, email, password, artist, track, album, can_read_proc
     artist = None
     album = None
     track = None
-    stations[email] = []
     email = ""
     password = ""
     first_login = True
@@ -230,17 +237,16 @@ def logout():
         proc.terminate()
         proc.wait()
         proc = None
-    logged_out = True
+    can_read_proc = False
     redirect("/login")
 
 def stay_alive(): # please
     global proc
     while True:
         try:
-            if proc is not None and not logged_out:
-                time.sleep(90)
-                request = urllib.urlopen("http://0.0.0.0:8080/current.json")
-                request = urllib.urlopen("http://0.0.0.0:8080/home")
+            time.sleep(90)
+            request = urllib.urlopen("http://0.0.0.0:8080/current.json")
+            request = urllib.urlopen("http://0.0.0.0:8080/home")
         except Exception, e:
             continue
 
