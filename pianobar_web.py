@@ -239,9 +239,8 @@ def stay_alive(): # please
         try:
             if proc is not None and not logged_out:
                 time.sleep(90)
-                read_all(proc.stdin)
-                read_all(proc.stdout)
-
+                request = urllib.urlopen("http://0.0.0.0:8080/current.json")
+                request = urllib.urlopen("http://0.0.0.0:8080/home")
         except Exception, e:
             continue
 
