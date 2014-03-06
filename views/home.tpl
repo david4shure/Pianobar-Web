@@ -140,7 +140,7 @@
           top_votes(data.votes);
           if ( track != data.track ) {
             $('#title').html(data.artist + ' - ' + data.track + ' <small>from <i>' + data.album + '</i></small>');
-            document.getElementById("current_station").innerHTML = data.station;
+            document.getElementById("current_station").innerHTML = data.station + " Radio";
             artist_info(data.artist);
             album_info(data.artist, data.album);
             track = data.track;

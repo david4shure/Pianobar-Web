@@ -23,6 +23,7 @@ votes = {}
 necessary_votes = 1
 voting_interval = 30 # seconds
 station_changer = None
+admin_ip = None
 
 email = ""
 password = ""
@@ -127,6 +128,7 @@ def home():
         redirect("/login")
 
     if first_login or need_to_refresh_stations:
+        print "... Refreshing ..."
         refreshed_stations = parse_stations(read_all(proc.stdout))
         try:
             stations[email] == refreshed_stations
@@ -139,7 +141,7 @@ def home():
 
     first_login = False
     
-    parse_now_playing(read_all(proc.stdout))
+    #parse_now_playing(read_all(proc.stdout))
     can_read_proc = True
 
     if artist is not None:
