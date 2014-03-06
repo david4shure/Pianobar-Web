@@ -5,7 +5,7 @@
 from bottle import *
 from threading import Thread
 from collections import Counter
-import subprocess, os, signal, time, urllib, json
+import subprocess, os, signal, time, urllib, json, datetime
 
 # Global variables
 proc = None
@@ -20,6 +20,9 @@ track = None
 album = None
 can_read_proc = False
 votes = {}
+necessary_votes = 1
+voting_interval = 30 # seconds
+station_changer = None
 
 email = ""
 password = ""
@@ -110,11 +113,15 @@ def verify():
 # home route
 @get('/home')
 def home():
-    global proc, stations, music_playing, current_station, first_login, need_to_refresh_stations, artist, track, album, caffeine, can_read_proc, email
+    global proc, stations, music_playing, current_station, first_login, need_to_refresh_stations, artist, track, album, caffeine, can_read_proc, email, station_changer
 
     if caffeine is None:
         caffeine = Thread(target=stay_alive)
         caffeine.start()
+
+    if station_changer is None:
+        station_changer = Thread(target=remote)
+        station_changer.start()
 
     if proc is None:
         redirect("/login")
@@ -151,7 +158,7 @@ def get_station_name(identifier):
 
 @get('/current.json')
 def current_track():
-    global proc, artist, track, album, can_read_proc, votes
+    global proc, artist, track, album, can_read_proc, votes, current_station
 
     if proc is not None and can_read_proc:
         parse_now_playing(read_all(proc.stdout))
@@ -169,7 +176,7 @@ def current_track():
     if len(top_voted_stations) >= 5:
         top_voted_stations = top_voted_stations[0:5]
     print "Top Votes: " + str(top_voted_stations)
-    return """{ "artist" : "%s", "track" : "%s", "album" : "%s", "votes" : %s }""" % (artist, track, album, json.dumps(top_voted_stations, ensure_ascii=False))
+    return """{ "artist" : "%s", "track" : "%s", "album" : "%s", "votes" : %s, "station" : "%s"}""" % (artist, track, album, json.dumps(top_voted_stations, ensure_ascii=False), current_station)
 
 
 # self explainatory, route for changing stations
@@ -271,10 +278,43 @@ def stay_alive(): # please
     while True:
         try:
             time.sleep(90)
-            request = urllib.urlopen("http://0.0.0.0:8080/current.json")
+            request = urllib.urlopen("http://0.0.0.0:8080/current")
             request = urllib.urlopen("http://0.0.0.0:8080/home")
         except Exception, e:
             continue
+
+
+def get_top_votes(votes): # taking in votes as our global variable
+    top_voted_ids = Counter(votes.values()).most_common()
+    top_voted_stations = []
+
+    for vote in top_voted_ids:
+        top_voted_stations.append([vote[0], vote[1]]) # corrosponds to station id, then vote count
+
+    if len(top_voted_stations) >= 5:
+        top_voted_stations = top_voted_stations[0:5]
+
+    return top_voted_stations
+
+
+def remote():
+    global proc, necessary_votes, votes, voting_interval, current_station
+    while True:
+        time.sleep(voting_interval)
+        top_votes = get_top_votes(votes)
+        try:
+            if top_votes[0][1] >= necessary_votes:
+                proc.stdin.write("s")
+                proc.stdin.write(str(top_votes[0][0]) + "\n")
+                votes = {}
+                current_station = get_station_name(top_votes[0][0])
+                print "Changing station"
+            else:
+                print "Not changing station"
+        except Exception, e:
+            print "No votes recorded."
+            
+            
 
 def signal_handler(signum, frame):
     raise Exception("! readline() took too long !")

@@ -91,7 +91,7 @@
                 <a class="left-off-canvas-toggle menu-icon" ><span></span></a>
               </section>
               <section class="middle tab-bar-section">
-                <h1 class="title">{{ current_station }} Radio</h1>
+                <h1 class="title" id="current_station">{{ current_station }} Radio</h1>
               </section>
             </nav>
 
@@ -140,6 +140,7 @@
           top_votes(data.votes);
           if ( track != data.track ) {
             $('#title').html(data.artist + ' - ' + data.track + ' <small>from <i>' + data.album + '</i></small>');
+            document.getElementById("current_station").innerHTML = data.station;
             artist_info(data.artist);
             album_info(data.artist, data.album);
             track = data.track;
@@ -148,6 +149,11 @@
       }
 
       function top_votes(votes) {
+          if (votes.length == 0) {
+              for (var j = 0; j < 5; j++) {
+	          document.getElementById("top_station_" + j).innerHTML = "";
+	      }
+          }
           for (var i = 0; i < votes.length; i++) {
 	    document.getElementById("top_station_" + i).innerHTML = "<div style=\"float:left;\">" + votes[i][0] + "</div><div style=\"float:right;\">" + votes[i][1] + "</div>";
       	  }
