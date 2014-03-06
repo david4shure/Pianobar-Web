@@ -23,7 +23,7 @@ votes = {}
 necessary_votes = 1
 voting_interval = 30 # seconds
 station_changer = None
-admin_ip = None
+admin_ip = ""
 
 email = ""
 password = ""
@@ -62,7 +62,7 @@ def serve_static(filename):
 # authenticates credentials with pandora
 @post('/auth')
 def authenticate():
-    global proc, email, password
+    global proc, email, password, admin_ip
     proc = None
     proc = subprocess.Popen("pianobar", stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if proc is None:
@@ -95,7 +95,7 @@ def authenticate():
 # user to kill any existing pianobar processes
 @get('/verify')
 def verify():
-    global email, password, proc
+    global email, password, proc, admin_ip
 
     if email and password:
         ps_aux = subprocess.Popen("ps aux | grep pianobar", stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
@@ -107,6 +107,7 @@ def verify():
                 ps_aux.wait()
                 return template("verify", output=ps_aux_output)
 
+        admin_ip = request.remote_addr
         redirect("/home")
     else:
         redirect("/login")
@@ -114,7 +115,7 @@ def verify():
 # home route
 @get('/home')
 def home():
-    global proc, stations, music_playing, current_station, first_login, need_to_refresh_stations, artist, track, album, caffeine, can_read_proc, email, station_changer
+    global proc, stations, music_playing, current_station, first_login, need_to_refresh_stations, artist, track, album, caffeine, can_read_proc, email, station_changer, admin_ip
 
     if caffeine is None:
         caffeine = Thread(target=stay_alive)
@@ -148,8 +149,14 @@ def home():
         print "Artist: " + artist + " Track: " + track + " Album: " + album
 
     now_playing = { "track": track, "artist": artist, "album": album }
+    
+    is_admin = (request.remote_addr == admin_ip)
+    if is_admin:
+        print "You're the admin!"
+    else:
+        print "Admin IP: " + admin_ip + " You're IP: " + request.remote_addr
 
-    return template("home", user_stations=stations[email], current_user=email, music_playing=music_playing, current_station=current_station, now_playing=now_playing, votes=votes)
+    return template("home", user_stations=stations[email], current_user=email, music_playing=music_playing, current_station=current_station, now_playing=now_playing, votes=votes, is_admin=is_admin)
 
 
 def get_station_name(identifier):

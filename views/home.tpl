@@ -20,6 +20,7 @@
         <div class="show-for-medium-up" style="height:38px"></div>
         <h2>Pandora Bar</h2>
       </div>
+      % if is_admin:
       <div class="small-12 medium-7 columns">
         <fieldset>
           <legend>Controls</legend>
@@ -58,6 +59,7 @@
           </div>
         </fieldset>
       </div>
+      % end
     </div>
 
     <div class="small-12 medium-2 columns">
