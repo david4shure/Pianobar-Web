@@ -4,7 +4,8 @@
 
 from bottle import *
 from threading import Thread
-import subprocess, os, signal, time, urllib
+from collections import Counter
+import subprocess, os, signal, time, urllib, json
 
 # Global variables
 proc = None
@@ -18,6 +19,7 @@ artist = None
 track = None
 album = None
 can_read_proc = False
+votes = {}
 
 email = ""
 password = ""
@@ -26,6 +28,13 @@ password = ""
 @get('/')
 def index():
     redirect("/login")
+
+@get('/vote/<station>')
+def vote(station):
+    global votes
+    print "Client IP: " + request.remote_addr
+    votes[request.remote_addr] = station
+    redirect("/home")
 
 # checks if we are already logged in
 @get('/login')
@@ -131,11 +140,18 @@ def home():
 
     now_playing = { "track": track, "artist": artist, "album": album }
 
-    return template("home", user_stations=stations[email], current_user=email, music_playing=music_playing, current_station=current_station, now_playing=now_playing)
+    return template("home", user_stations=stations[email], current_user=email, music_playing=music_playing, current_station=current_station, now_playing=now_playing, votes=votes)
+
+
+def get_station_name(identifier):
+    global stations, email
+    for station in stations[email]:
+        if int(identifier) == station.identifier:
+            return station.name
 
 @get('/current.json')
 def current_track():
-    global proc, artist, track, album, can_read_proc
+    global proc, artist, track, album, can_read_proc, votes
 
     if proc is not None and can_read_proc:
         parse_now_playing(read_all(proc.stdout))
@@ -143,7 +159,17 @@ def current_track():
     else:
         print "Not reading from proc.."
     print "Artist: " + str(artist) + "\t Album: " + str(album) + "\t Track: " + str(track)
-    return """{ "artist" : "%s", "track" : "%s", "album" : "%s" }""" % (artist, track, album)
+    top_voted_ids = Counter(votes.values()).most_common()
+
+    top_voted_stations = []
+
+    for vote in top_voted_ids:
+        top_voted_stations.append([get_station_name(vote[0]), vote[1]])
+
+    if len(top_voted_stations) >= 5:
+        top_voted_stations = top_voted_stations[0:5]
+    print "Top Votes: " + str(top_voted_stations)
+    return """{ "artist" : "%s", "track" : "%s", "album" : "%s", "votes" : %s }""" % (artist, track, album, json.dumps(top_voted_stations, ensure_ascii=False))
 
 
 # self explainatory, route for changing stations
@@ -223,13 +249,14 @@ def kill():
 # logs user out, and terminates the pianobar process spawned by user
 @get('/logout')
 def logout():
-    global proc, first_login, email, password, artist, track, album, can_read_proc
+    global proc, first_login, email, password, artist, track, album, can_read_proc, votes
     artist = None
     album = None
     track = None
     email = ""
     password = ""
     first_login = True
+    votes = {}
     if proc is None:
         redirect("/login")
     else:

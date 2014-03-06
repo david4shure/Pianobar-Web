@@ -59,6 +59,27 @@
         </fieldset>
       </div>
     </div>
+
+    <div class="small-12 medium-2 columns">
+      <fieldset>
+	<legend>Station to play next</legend>
+	<ul class="side-nav" id="top_stations">
+          <div style="float: left;"><b>Station</b></div><div style="float: right;"><b>Votes</b></div>
+          <br>
+	  <li id="top_station_0"></li>
+          <br>
+	  <li id="top_station_1"></li>
+          <br>
+	  <li id="top_station_2"></li>
+          <br>
+	  <li id="top_station_3"></li>
+          <br>
+	  <li id="top_station_4"></li>
+          <br>
+	</ul>
+      </fieldset>
+    </div>
+
     
     <!-- main body -->
     <div class="row">
@@ -77,13 +98,15 @@
             <aside class="left-off-canvas-menu">
               <ul class="off-canvas-list">
                 <li><label>Stations:</label></li>
-              % for station in user_stations:
-                % if station.name == current_station:
+
+		% for station in user_stations:		
+
+                  % if station.name == current_station:
                 <li><a href="#">{{ station.name }}</a></li>
-                % else:
-                <li><a href="/home/{{ station.identifier }}">{{ station.name }}</a></li>
+                  % else:
+		<li><a href="/vote/{{station.identifier}}">{{ station.name }}</a></li>
+                  % end
                 % end
-              % end
               </ul>
             </aside>
 
@@ -114,13 +137,20 @@
 
       function now_playing() {
         $.getJSON('/current.json', function(data) {
+          top_votes(data.votes);
           if ( track != data.track ) {
-            $('#title').html(data.artist + ' - ' + data.track + ' <small>from <i>' + data.album + '</i></small>')
+            $('#title').html(data.artist + ' - ' + data.track + ' <small>from <i>' + data.album + '</i></small>');
             artist_info(data.artist);
             album_info(data.artist, data.album);
             track = data.track;
           }
         });
+      }
+
+      function top_votes(votes) {
+          for (var i = 0; i < votes.length; i++) {
+	    document.getElementById("top_station_" + i).innerHTML = "<div style=\"float:left;\">" + votes[i][0] + "</div><div style=\"float:right;\">" + votes[i][1] + "</div>";
+      	  }
       }
 
       function artist_info(artist) {
