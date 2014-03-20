@@ -4,6 +4,7 @@ Pianobar-Web
 Web interface for pianobar with album artwork through Last FM, as well as social features such as voting
 on the next station to be played.
 
+![alt link](http://i1306.photobucket.com/albums/s570/david4shure/3a7e38aa-ca7b-408f-bee3-6d1bd74a7668_zps415b71a7.png)
 
 Installation
 ============
