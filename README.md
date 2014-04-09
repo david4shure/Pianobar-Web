@@ -17,7 +17,7 @@ Upcoming
 =============
 1. More extensive album artwork and artist bio info through Last FM. (done, MS 1)
 2. Implementing social features such as voting on the next station to be played. (done, MS 2)
-3. Will introduce distributed music streaming to any internet browser on the same network as the server (done, MS 3)
+3. Will introduce distributed music streaming to any internet browser on the same network as the server (done, MS 3; see [Antisocial Streamer](https://github.com/johnny4shure/Antisocial-Streamer)
 4. Instead of using pianobar, migrate to python-pandora for cleaner code base
     -- https://github.com/02strich/python-pandora
 5. Include bug fixes for those using a config file with pianobar, (~/.config/pianobar/ctl)
